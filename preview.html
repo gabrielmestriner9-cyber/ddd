@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fisio Pilates Ketty — Sistema de Gestão</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8fafc; color: #1e293b; }
+
+  /* Layout */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 240px; background: #1a4e8f; display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; height: 100vh; z-index: 100;
+  }
+  .sidebar-logo {
+    padding: 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-logo h1 { color: #fff; font-size: 15px; font-weight: 700; line-height: 1.3; }
+  .sidebar-logo p { color: rgba(255,255,255,0.55); font-size: 11px; margin-top: 2px; }
+  .sidebar-logo .logo-icon {
+    width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 8px;
+    font-size: 18px;
+  }
+
+  .sidebar-nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border-radius: 8px; cursor: pointer; color: rgba(255,255,255,0.7);
+    font-size: 14px; font-weight: 500; margin-bottom: 2px; transition: all 0.15s;
+    user-select: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-item.active { background: rgba(255,255,255,0.18); color: #fff; }
+  .nav-item svg { flex-shrink: 0; }
+
+  .sidebar-footer {
+    padding: 12px 8px; border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-user {
+    display: flex; align-items: center; gap-10px; gap: 10px; padding: 10px 12px;
+  }
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.2);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+  .sidebar-user-info p { font-size: 13px; font-weight: 600; color: #fff; }
+  .sidebar-user-info span { font-size: 11px; color: rgba(255,255,255,0.5); }
+
+  /* Main */
+  .main { margin-left: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* Topbar */
+  .topbar {
+    background: #fff; border-bottom: 1px solid #e2e8f0; padding: 0 24px;
+    height: 56px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar h2 { font-size: 16px; font-weight: 700; color: #1e293b; }
+  .topbar-actions { display: flex; align-items: center; gap: 10px; }
+  .topbar-date { font-size: 12px; color: #94a3b8; }
+
+  /* Content */
+  .content { padding: 24px; flex: 1; }
+
+  /* Pages */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: #fff; border-radius: 12px; border: 1px solid #e2e8f0;
+    padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card-title { font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 14px; }
+
+  /* Stats Grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .stat-card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 16px; display: flex; align-items: flex-start; gap: 14px; }
+  .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .stat-value { font-size: 24px; font-weight: 700; color: #1e293b; line-height: 1; }
+  .stat-label { font-size: 11px; color: #94a3b8; margin-top: 3px; font-weight: 500; }
+  .stat-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+
+  /* Welcome banner */
+  .welcome-banner {
+    background: linear-gradient(135deg, #1a4e8f 0%, #0f3060 100%);
+    border-radius: 14px; padding: 20px 24px; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px;
+  }
+  .welcome-banner h2 { font-size: 18px; font-weight: 700; }
+  .welcome-banner p { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .welcome-count { text-align: right; }
+  .welcome-count .num { font-size: 42px; font-weight: 800; line-height: 1; }
+  .welcome-count small { font-size: 12px; color: rgba(255,255,255,0.6); display: block; }
+
+  /* Two col grid */
+  .two-col { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+  .three-col-right { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 11px; font-weight: 600; color: #94a3b8; text-align: left; padding: 8px 12px; border-bottom: 1px solid #f1f5f9; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { font-size: 13px; color: #334155; padding: 10px 12px; border-bottom: 1px solid #f8fafc; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafcff; }
+
+  /* Badges */
+  .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: #dcfce7; color: #16a34a; }
+  .badge-blue { background: #dbeafe; color: #2563eb; }
+  .badge-yellow { background: #fef9c3; color: #ca8a04; }
+  .badge-red { background: #fee2e2; color: #dc2626; }
+  .badge-gray { background: #f1f5f9; color: #64748b; }
+  .badge-purple { background: #f3e8ff; color: #9333ea; }
+  .badge-cyan { background: #cffafe; color: #0891b2; }
+  .badge-orange { background: #ffedd5; color: #ea580c; }
+
+  /* Appointment item */
+  .apt-item {
+    display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+    border-radius: 8px; border: 1px solid #f1f5f9; margin-bottom: 6px;
+    transition: background 0.1s;
+  }
+  .apt-item:hover { background: #f8fafc; }
+  .apt-time { text-align: center; width: 52px; flex-shrink: 0; }
+  .apt-time .h { font-size: 12px; font-weight: 700; color: #334155; }
+  .apt-time .m { font-size: 11px; color: #94a3b8; }
+  .apt-bar { width: 3px; height: 36px; border-radius: 3px; flex-shrink: 0; }
+  .apt-info { flex: 1; min-width: 0; }
+  .apt-info .name { font-size: 13px; font-weight: 600; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .apt-info .type { font-size: 11px; color: #94a3b8; margin-top: 1px; }
+
+  /* Alert items */
+  .alert-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; font-size: 12px; }
+
+  /* Progress bar */
+  .progress { height: 5px; background: #f1f5f9; border-radius: 3px; overflow: hidden; margin-top: 4px; }
+  .progress-bar { height: 100%; border-radius: 3px; }
+  .service-row { margin-bottom: 10px; }
+  .service-row-header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px; }
+  .service-row-header span:first-child { color: #64748b; }
+  .service-row-header span:last-child { font-weight: 600; color: #1e293b; }
+
+  /* Upcoming item */
+  .upcoming-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .upcoming-info { flex: 1; min-width: 0; }
+  .upcoming-info .name { font-size: 13px; font-weight: 500; color: #334155; }
+  .upcoming-info .meta { font-size: 11px; color: #94a3b8; margin-top: 1px; }
+
+  /* Patient card */
+  .patient-row { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; }
+  .patient-row:hover { border-color: #bcd2f5; background: #f8fbff; }
+  .patient-avatar { width: 40px; height: 40px; border-radius: 50%; background: #1a4e8f; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+  .patient-avatar.green { background: #16a34a; }
+  .patient-avatar.purple { background: #9333ea; }
+  .patient-avatar.cyan { background: #0891b2; }
+  .patient-avatar.orange { background: #ea580c; }
+
+  /* Financial */
+  .fin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+
+  /* Search + Filter bar */
+  .filter-bar { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; }
+  .search-input {
+    flex: 1; padding: 8px 14px 8px 36px; border: 1px solid #e2e8f0; border-radius: 8px;
+    font-size: 13px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 12px center;
+    outline: none; color: #334155;
+  }
+  .search-input:focus { border-color: #1a4e8f; box-shadow: 0 0 0 2px rgba(26,78,143,0.1); }
+
+  .btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: #1a4e8f; color: #fff; }
+  .btn-primary:hover { background: #153f74; }
+  .btn-outline { background: #fff; color: #64748b; border: 1px solid #e2e8f0; }
+  .btn-outline:hover { background: #f8fafc; }
+
+  /* Section heading */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .see-all { font-size: 12px; color: #1a4e8f; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+
+  /* Service cards */
+  .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .service-card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 18px; }
+  .service-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .service-card-title { font-size: 14px; font-weight: 700; color: #1e293b; margin: 10px 0 4px; }
+  .service-card-desc { font-size: 12px; color: #94a3b8; line-height: 1.5; margin-bottom: 12px; }
+  .service-card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px; }
+  .price { font-size: 18px; font-weight: 800; color: #1a4e8f; }
+  .duration { font-size: 12px; color: #94a3b8; }
+
+  /* Reports */
+  .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .chart-bar-wrap { display: flex; align-items: flex-end; gap: 6px; height: 120px; padding: 0 0 4px; }
+  .chart-bar { flex: 1; border-radius: 5px 5px 0 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; cursor: pointer; transition: opacity 0.1s; }
+  .chart-bar:hover { opacity: 0.8; }
+  .chart-bar-fill { width: 100%; border-radius: 5px 5px 0 0; }
+  .chart-bar-label { font-size: 10px; color: #94a3b8; margin-top: 4px; }
+  .chart-bar-val { font-size: 10px; font-weight: 600; color: #64748b; margin-bottom: 2px; }
+
+  /* Donut placeholder */
+  .donut-legend { display: flex; flex-direction: column; gap: 8px; }
+  .donut-row { display: flex; align-items: center; gap: 8px; }
+  .donut-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .donut-name { font-size: 12px; color: #64748b; flex: 1; }
+  .donut-val { font-size: 12px; font-weight: 600; color: #1e293b; }
+  .donut-pct { font-size: 11px; color: #94a3b8; width: 32px; text-align: right; }
+
+  /* Scrollable table wrapper */
+  .table-wrap { overflow-x: auto; }
+
+  /* Responsive tweaks */
+  @media(max-width: 1100px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .service-grid { grid-template-columns: repeat(2, 1fr); }
+    .report-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🏥</div>
+      <h1>Fisio Pilates Ketty</h1>
+      <p>Sistema de Gestão</p>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="showPage('dashboard', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('patients', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Pacientes
+      </div>
+      <div class="nav-item" onclick="showPage('appointments', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Agendamentos
+      </div>
+      <div class="nav-item" onclick="showPage('financial', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Financeiro
+      </div>
+      <div class="nav-item" onclick="showPage('services', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Serviços
+      </div>
+      <div class="nav-item" onclick="showPage('reports', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Relatórios
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="avatar">K</div>
+        <div class="sidebar-user-info">
+          <p>Ketty Gianotti</p>
+          <span>CREFITO3: 74.249-F</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <h2 id="page-title">Dashboard</h2>
+      <div class="topbar-actions">
+        <span class="topbar-date">Segunda-feira, 17 de março de 2026</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ===== DASHBOARD ===== -->
+      <div class="page active" id="page-dashboard">
+
+        <!-- Welcome -->
+        <div class="welcome-banner">
+          <div>
+            <h2>Bom dia, Ketty! 👋</h2>
+            <p>Segunda-feira, 17 de março de 2026</p>
+          </div>
+          <div class="welcome-count">
+            <div class="num">8</div>
+            <small>atendimentos hoje</small>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#dbeafe">👥</div>
+            <div>
+              <div class="stat-value">24</div>
+              <div class="stat-label">Pacientes Ativos</div>
+              <div class="stat-sub">3 aguardando avaliação</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#dcfce7">📅</div>
+            <div>
+              <div class="stat-value">8</div>
+              <div class="stat-label">Atendimentos Hoje</div>
+              <div class="stat-sub">5 concluídos · 3 pendentes</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#fef9c3">💰</div>
+            <div>
+              <div class="stat-value">R$ 4.280</div>
+              <div class="stat-label">Receita do Mês</div>
+              <div class="stat-sub">R$ 480,00 hoje</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#f3e8ff">📈</div>
+            <div>
+              <div class="stat-value">87%</div>
+              <div class="stat-label">Taxa de Ocupação</div>
+              <div class="stat-sub">Sessões concluídas hoje</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <!-- Today Schedule -->
+          <div class="card">
+            <div class="section-header">
+              <span class="card-title" style="margin-bottom:0">Agenda de Hoje</span>
+              <span class="see-all" onclick="showPage('appointments', document.querySelector('[onclick*=appointments]'))">Ver tudo →</span>
+            </div>
+
+            <div class="apt-item">
+              <div class="apt-time"><div class="h">08:00</div><div class="m">08:50</div></div>
+              <div class="apt-bar" style="background:#1a4e8f"></div>
+              <div class="apt-info"><div class="name">Ana Paula Ferreira</div><div class="type">Fisioterapia</div></div>
+              <span class="badge badge-gray">Concluído</span>
+              <span style="font-size:11px;color:#16a34a;font-weight:600;margin-left:6px">✓ Pago</span>
+            </div>
+            <div class="apt-item">
+              <div class="apt-time"><div class="h">09:00</div><div class="m">09:55</div></div>
+              <div class="apt-bar" style="background:#78bc1f"></div>
+              <div class="apt-info"><div class="name">Bruno Henrique Lima</div><div class="type">Pilates</div></div>
+              <span class="badge badge-gray">Concluído</span>
+              <span style="font-size:11px;color:#16a34a;font-weight:600;margin-left:6px">✓ Pago</span>
+            </div>
+            <div class="apt-item">
+              <div class="apt-time"><div class="h">10:00</div><div class="m">10:50</div></div>
+              <div class="apt-bar" style="background:#1a4e8f"></div>
+              <div class="apt-info"><div class="name">Carla Mendes Souza</div><div class="type">Fisioterapia</div></div>
+              <span class="badge badge-gray">Concluído</span>
+              <span style="font-size:11px;color:#16a34a;font-weight:600;margin-left:6px">✓ Pago</span>
+            </div>
+            <div class="apt-item">
+              <div class="apt-time"><div class="h">11:00</div><div class="m">11:55</div></div>
+              <div class="apt-bar" style="background:#78bc1f"></div>
+              <div class="apt-info"><div class="name">Diego Rocha</div><div class="type">Pilates</div></div>
+              <span class="badge badge-gray">Concluído</span>
+              <span style="font-size:11px;color:#ea580c;font-weight:600;margin-left:6px">Pendente</span>
+            </div>
+            <div class="apt-item">
+              <div class="apt-time"><div class="h">13:30</div><div class="m">14:20</div></div>
+              <div class="apt-bar" style="background:#1a4e8f"></div>
+              <div class="apt-info"><div class="name">Fernanda Costa</div><div class="type">Fisioterapia</div></div>
+              <span class="badge badge-gray">Concluído</span>
+              <span style="font-size:11px;color:#16a34a;font-weight:600;margin-left:6px">✓ Pago</span>
+            </div>
+            <div class="apt-item">
+              <div class="apt-time"><div class="h">14:30</div><div class="m">15:25</div></div>
+              <div class="apt-bar" style="background:#f59e0b"></div>
+              <div class="apt-info"><div class="name">Sofia Alves (criança)</div><div class="type">Pilates Kids</div></div>
+              <span class="badge badge-blue">Confirmado</span>
+              <span style="font-size:11px;color:#ea580c;font-weight:600;margin-left:6px">Pendente</span>
+            </div>
+            <div class="apt-item">
+              <div class="apt-time"><div class="h">15:30</div><div class="m">16:20</div></div>
+              <div class="apt-bar" style="background:#8b5cf6"></div>
+              <div class="apt-info"><div class="name">Gabriela Nunes</div><div class="type">Liberação Miofascial</div></div>
+              <span class="badge badge-blue">Confirmado</span>
+              <span style="font-size:11px;color:#ea580c;font-weight:600;margin-left:6px">Pendente</span>
+            </div>
+            <div class="apt-item">
+              <div class="apt-time"><div class="h">16:30</div><div class="m">17:30</div></div>
+              <div class="apt-bar" style="background:#06b6d4"></div>
+              <div class="apt-info"><div class="name">Rafael Oliveira</div><div class="type">Reabilitação</div></div>
+              <span class="badge badge-yellow">Agendado</span>
+              <span style="font-size:11px;color:#ea580c;font-weight:600;margin-left:6px">Pendente</span>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div class="three-col-right">
+            <!-- Próximos -->
+            <div class="card">
+              <div class="section-header">
+                <span class="card-title" style="margin-bottom:0">Próximos</span>
+                <span style="font-size:18px">🕐</span>
+              </div>
+              <div class="upcoming-item">
+                <div class="upcoming-info">
+                  <div class="name">Mariana Pires</div>
+                  <div class="meta">18/03 às 09:00 · Pilates</div>
+                </div>
+                <span class="badge badge-blue" style="font-size:10px">Pilates</span>
+              </div>
+              <div class="upcoming-item">
+                <div class="upcoming-info">
+                  <div class="name">Henrique Barbosa</div>
+                  <div class="meta">18/03 às 10:00 · Fisioterapia</div>
+                </div>
+                <span class="badge" style="background:#dbeafe;color:#1a4e8f;font-size:10px">Fisio</span>
+              </div>
+              <div class="upcoming-item">
+                <div class="upcoming-info">
+                  <div class="name">Juliana Almeida</div>
+                  <div class="meta">19/03 às 08:00 · Reabilitação</div>
+                </div>
+                <span class="badge badge-cyan" style="font-size:10px">Reabili.</span>
+              </div>
+              <div class="upcoming-item" style="margin-bottom:0">
+                <div class="upcoming-info">
+                  <div class="name">Lucas Ferreira</div>
+                  <div class="meta">19/03 às 14:30 · Ventosaterapia</div>
+                </div>
+                <span class="badge badge-red" style="font-size:10px">Ventos.</span>
+              </div>
+            </div>
+
+            <!-- Alertas -->
+            <div class="card">
+              <div class="card-title">Alertas</div>
+              <div class="alert-item" style="background:#fef9c3;color:#854d0e">
+                ⚠️ <span>3 pacientes aguardando avaliação inicial</span>
+              </div>
+              <div class="alert-item" style="background:#ffedd5;color:#7c2d12">
+                ⚠️ <span>2 faltas nos últimos 7 dias</span>
+              </div>
+              <div class="alert-item" style="background:#fee2e2;color:#7f1d1d">
+                ⚠️ <span>4 pagamentos pendentes</span>
+              </div>
+              <div class="alert-item" style="background:#dcfce7;color:#14532d;margin-bottom:0">
+                ✅ <span>24 pacientes ativos este mês</span>
+              </div>
+            </div>
+
+            <!-- Serviços -->
+            <div class="card">
+              <div class="card-title">Serviços</div>
+              <div class="service-row">
+                <div class="service-row-header"><span>Fisioterapia</span><span>14</span></div>
+                <div class="progress"><div class="progress-bar" style="width:58%;background:#1a4e8f"></div></div>
+              </div>
+              <div class="service-row">
+                <div class="service-row-header"><span>Pilates</span><span>11</span></div>
+                <div class="progress"><div class="progress-bar" style="width:46%;background:#78bc1f"></div></div>
+              </div>
+              <div class="service-row">
+                <div class="service-row-header"><span>Reabilitação</span><span>7</span></div>
+                <div class="progress"><div class="progress-bar" style="width:29%;background:#06b6d4"></div></div>
+              </div>
+              <div class="service-row">
+                <div class="service-row-header"><span>Pilates Kids</span><span>5</span></div>
+                <div class="progress"><div class="progress-bar" style="width:21%;background:#f59e0b"></div></div>
+              </div>
+              <div class="service-row" style="margin-bottom:0">
+                <div class="service-row-header"><span>Lib. Miofascial</span><span>4</span></div>
+                <div class="progress"><div class="progress-bar" style="width:17%;background:#8b5cf6"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PATIENTS ===== -->
+      <div class="page" id="page-patients">
+        <div class="filter-bar">
+          <input class="search-input" type="text" placeholder="Buscar paciente por nome, CPF ou telefone..." />
+          <button class="btn btn-outline">🔽 Filtrar</button>
+          <button class="btn btn-primary">+ Novo Paciente</button>
+        </div>
+
+        <div class="card">
+          <div class="patient-row">
+            <div class="patient-avatar">A</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:14px;font-weight:600;color:#1e293b">Ana Paula Ferreira</div>
+              <div style="font-size:12px;color:#94a3b8">(15) 98765-4321 · 40 anos · Feminino</div>
+              <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
+                <span class="badge" style="background:#dbeafe;color:#1a4e8f">Fisioterapia</span>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <span class="badge badge-green">Ativo</span>
+              <div style="font-size:12px;color:#94a3b8;margin-top:4px">18 sessões · Últ. 15/03</div>
+            </div>
+          </div>
+          <div class="patient-row">
+            <div class="patient-avatar green">B</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:14px;font-weight:600;color:#1e293b">Bruno Henrique Lima</div>
+              <div style="font-size:12px;color:#94a3b8">(15) 99123-4567 · 32 anos · Masculino</div>
+              <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
+                <span class="badge badge-blue">Pilates</span>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <span class="badge badge-green">Ativo</span>
+              <div style="font-size:12px;color:#94a3b8;margin-top:4px">24 sessões · Últ. 17/03</div>
+            </div>
+          </div>
+          <div class="patient-row">
+            <div class="patient-avatar purple">C</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:14px;font-weight:600;color:#1e293b">Carla Mendes Souza</div>
+              <div style="font-size:12px;color:#94a3b8">(15) 97654-3210 · 52 anos · Feminino</div>
+              <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
+                <span class="badge" style="background:#dbeafe;color:#1a4e8f">Fisioterapia</span>
+                <span class="badge badge-purple">Lib. Miofascial</span>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <span class="badge badge-green">Ativo</span>
+              <div style="font-size:12px;color:#94a3b8;margin-top:4px">31 sessões · Últ. 14/03</div>
+            </div>
+          </div>
+          <div class="patient-row">
+            <div class="patient-avatar cyan">D</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:14px;font-weight:600;color:#1e293b">Diego Rocha</div>
+              <div style="font-size:12px;color:#94a3b8">(15) 98001-2233 · 27 anos · Masculino</div>
+              <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
+                <span class="badge badge-blue">Pilates</span>
+                <span class="badge badge-cyan">Reabilitação</span>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <span class="badge badge-green">Ativo</span>
+              <div style="font-size:12px;color:#94a3b8;margin-top:4px">12 sessões · Últ. 17/03</div>
+            </div>
+          </div>
+          <div class="patient-row">
+            <div class="patient-avatar orange">F</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:14px;font-weight:600;color:#1e293b">Fernanda Costa</div>
+              <div style="font-size:12px;color:#94a3b8">(15) 96543-2100 · 45 anos · Feminino</div>
+              <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
+                <span class="badge" style="background:#dbeafe;color:#1a4e8f">Fisioterapia</span>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <span class="badge badge-yellow">Aguardando</span>
+              <div style="font-size:12px;color:#94a3b8;margin-top:4px">0 sessões</div>
+            </div>
+          </div>
+          <div class="patient-row">
+            <div class="patient-avatar" style="background:#e11d48">G</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:14px;font-weight:600;color:#1e293b">Gabriela Nunes</div>
+              <div style="font-size:12px;color:#94a3b8">(15) 99887-6655 · 38 anos · Feminino</div>
+              <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
+                <span class="badge badge-purple">Lib. Miofascial</span>
+                <span class="badge badge-red">Ventosaterapia</span>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <span class="badge badge-green">Ativo</span>
+              <div style="font-size:12px;color:#94a3b8;margin-top:4px">8 sessões · Últ. 10/03</div>
+            </div>
+          </div>
+          <div class="patient-row" style="margin-bottom:0">
+            <div class="patient-avatar" style="background:#64748b">R</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:14px;font-weight:600;color:#1e293b">Rafael Oliveira</div>
+              <div style="font-size:12px;color:#94a3b8">(15) 98776-5544 · 29 anos · Masculino</div>
+              <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
+                <span class="badge badge-cyan">Reabilitação</span>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <span class="badge badge-gray">Inativo</span>
+              <div style="font-size:12px;color:#94a3b8;margin-top:4px">5 sessões · Últ. 01/02</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== APPOINTMENTS ===== -->
+      <div class="page" id="page-appointments">
+        <div class="filter-bar">
+          <input class="search-input" type="text" placeholder="Buscar por paciente ou serviço..." />
+          <button class="btn btn-outline">📅 Março 2026</button>
+          <button class="btn btn-outline">🔽 Filtros</button>
+          <button class="btn btn-primary">+ Novo Agendamento</button>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Paciente</th>
+                  <th>Data</th>
+                  <th>Horário</th>
+                  <th>Serviço</th>
+                  <th>Status</th>
+                  <th>Pagamento</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Ana Paula Ferreira</strong></td>
+                  <td>17/03/2026</td><td>08:00 – 08:50</td>
+                  <td><span class="badge" style="background:#dbeafe;color:#1a4e8f">Fisioterapia</span></td>
+                  <td><span class="badge badge-gray">Concluído</span></td>
+                  <td><span style="color:#16a34a;font-weight:600">✓ Pago</span></td>
+                  <td>R$ 120,00</td>
+                </tr>
+                <tr>
+                  <td><strong>Bruno Henrique Lima</strong></td>
+                  <td>17/03/2026</td><td>09:00 – 09:55</td>
+                  <td><span class="badge badge-blue" style="background:#d1fae5;color:#059669">Pilates</span></td>
+                  <td><span class="badge badge-gray">Concluído</span></td>
+                  <td><span style="color:#16a34a;font-weight:600">✓ Pago</span></td>
+                  <td>R$ 100,00</td>
+                </tr>
+                <tr>
+                  <td><strong>Carla Mendes Souza</strong></td>
+                  <td>17/03/2026</td><td>10:00 – 10:50</td>
+                  <td><span class="badge" style="background:#dbeafe;color:#1a4e8f">Fisioterapia</span></td>
+                  <td><span class="badge badge-gray">Concluído</span></td>
+                  <td><span style="color:#16a34a;font-weight:600">✓ Pago</span></td>
+                  <td>R$ 120,00</td>
+                </tr>
+                <tr>
+                  <td><strong>Diego Rocha</strong></td>
+                  <td>17/03/2026</td><td>11:00 – 11:55</td>
+                  <td><span class="badge" style="background:#d1fae5;color:#059669">Pilates</span></td>
+                  <td><span class="badge badge-gray">Concluído</span></td>
+                  <td><span style="color:#ea580c;font-weight:600">Pendente</span></td>
+                  <td>R$ 100,00</td>
+                </tr>
+                <tr>
+                  <td><strong>Fernanda Costa</strong></td>
+                  <td>17/03/2026</td><td>13:30 – 14:20</td>
+                  <td><span class="badge" style="background:#dbeafe;color:#1a4e8f">Fisioterapia</span></td>
+                  <td><span class="badge badge-gray">Concluído</span></td>
+                  <td><span style="color:#16a34a;font-weight:600">✓ Pago</span></td>
+                  <td>R$ 120,00</td>
+                </tr>
+                <tr>
+                  <td><strong>Sofia Alves</strong></td>
+                  <td>17/03/2026</td><td>14:30 – 15:15</td>
+                  <td><span class="badge badge-yellow">Pilates Kids</span></td>
+                  <td><span class="badge badge-blue">Confirmado</span></td>
+                  <td><span style="color:#ea580c;font-weight:600">Pendente</span></td>
+                  <td>R$ 90,00</td>
+                </tr>
+                <tr>
+                  <td><strong>Gabriela Nunes</strong></td>
+                  <td>17/03/2026</td><td>15:30 – 16:10</td>
+                  <td><span class="badge badge-purple">Lib. Miofascial</span></td>
+                  <td><span class="badge badge-blue">Confirmado</span></td>
+                  <td><span style="color:#ea580c;font-weight:600">Pendente</span></td>
+                  <td>R$ 110,00</td>
+                </tr>
+                <tr>
+                  <td><strong>Rafael Oliveira</strong></td>
+                  <td>17/03/2026</td><td>16:30 – 17:30</td>
+                  <td><span class="badge badge-cyan">Reabilitação</span></td>
+                  <td><span class="badge badge-yellow">Agendado</span></td>
+                  <td><span style="color:#ea580c;font-weight:600">Pendente</span></td>
+                  <td>R$ 140,00</td>
+                </tr>
+                <tr>
+                  <td><strong>Mariana Pires</strong></td>
+                  <td>18/03/2026</td><td>09:00 – 09:55</td>
+                  <td><span class="badge" style="background:#d1fae5;color:#059669">Pilates</span></td>
+                  <td><span class="badge badge-yellow">Agendado</span></td>
+                  <td><span style="color:#ea580c;font-weight:600">Pendente</span></td>
+                  <td>R$ 100,00</td>
+                </tr>
+                <tr>
+                  <td><strong>Henrique Barbosa</strong></td>
+                  <td>18/03/2026</td><td>10:00 – 10:50</td>
+                  <td><span class="badge" style="background:#dbeafe;color:#1a4e8f">Fisioterapia</span></td>
+                  <td><span class="badge badge-yellow">Agendado</span></td>
+                  <td><span style="color:#ea580c;font-weight:600">Pendente</span></td>
+                  <td>R$ 120,00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== FINANCIAL ===== -->
+      <div class="page" id="page-financial">
+        <div class="fin-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#dcfce7">💵</div>
+            <div>
+              <div class="stat-value" style="color:#16a34a">R$ 4.280</div>
+              <div class="stat-label">Receita Março</div>
+              <div class="stat-sub">+12% vs mês anterior</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#fee2e2">💸</div>
+            <div>
+              <div class="stat-value" style="color:#dc2626">R$ 820</div>
+              <div class="stat-label">A Receber</div>
+              <div class="stat-sub">7 pagamentos pendentes</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#dbeafe">📊</div>
+            <div>
+              <div class="stat-value">48</div>
+              <div class="stat-label">Sessões no Mês</div>
+              <div class="stat-sub">Ticket médio: R$ 113,75</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-header" style="margin-bottom:14px">
+            <span class="card-title" style="margin-bottom:0">Movimentações — Março 2026</span>
+            <button class="btn btn-primary" style="padding:6px 12px;font-size:12px">+ Registrar Pagamento</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Paciente</th>
+                  <th>Serviço</th>
+                  <th>Data</th>
+                  <th>Forma</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Ana Paula Ferreira</strong></td>
+                  <td>Fisioterapia</td><td>17/03/2026</td>
+                  <td><span class="badge badge-blue">PIX</span></td>
+                  <td style="font-weight:700;color:#16a34a">R$ 120,00</td>
+                  <td><span class="badge badge-green">Pago</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Bruno Henrique Lima</strong></td>
+                  <td>Pilates</td><td>17/03/2026</td>
+                  <td><span class="badge badge-gray">Dinheiro</span></td>
+                  <td style="font-weight:700;color:#16a34a">R$ 100,00</td>
+                  <td><span class="badge badge-green">Pago</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Carla Mendes Souza</strong></td>
+                  <td>Fisioterapia</td><td>17/03/2026</td>
+                  <td><span class="badge badge-purple">Cartão</span></td>
+                  <td style="font-weight:700;color:#16a34a">R$ 120,00</td>
+                  <td><span class="badge badge-green">Pago</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Diego Rocha</strong></td>
+                  <td>Pilates</td><td>17/03/2026</td>
+                  <td>—</td>
+                  <td style="font-weight:700;color:#ea580c">R$ 100,00</td>
+                  <td><span class="badge badge-yellow">Pendente</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Fernanda Costa</strong></td>
+                  <td>Fisioterapia</td><td>17/03/2026</td>
+                  <td><span class="badge badge-blue">PIX</span></td>
+                  <td style="font-weight:700;color:#16a34a">R$ 120,00</td>
+                  <td><span class="badge badge-green">Pago</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Mariana Pires</strong></td>
+                  <td>Pilates</td><td>14/03/2026</td>
+                  <td><span class="badge badge-gray">Dinheiro</span></td>
+                  <td style="font-weight:700;color:#16a34a">R$ 100,00</td>
+                  <td><span class="badge badge-green">Pago</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Henrique Barbosa</strong></td>
+                  <td>Fisioterapia</td><td>14/03/2026</td>
+                  <td>—</td>
+                  <td style="font-weight:700;color:#ea580c">R$ 120,00</td>
+                  <td><span class="badge badge-yellow">Pendente</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SERVICES ===== -->
+      <div class="page" id="page-services">
+        <div style="margin-bottom:16px;display:flex;justify-content:flex-end">
+          <button class="btn btn-primary">+ Novo Serviço</button>
+        </div>
+        <div class="service-grid">
+          <div class="service-card">
+            <span class="service-dot" style="background:#1a4e8f"></span><span style="font-size:12px;color:#64748b;font-weight:600">Fisioterapia</span>
+            <div class="service-card-title">Fisioterapia</div>
+            <div class="service-card-desc">Atendimento fisioterapêutico individual para reabilitação e tratamento de dores musculoesqueléticas.</div>
+            <div class="service-card-footer">
+              <div><div class="price">R$ 120</div><div class="duration">por sessão</div></div>
+              <span class="badge badge-gray">⏱ 50 min</span>
+            </div>
+          </div>
+          <div class="service-card">
+            <span class="service-dot" style="background:#78bc1f"></span><span style="font-size:12px;color:#64748b;font-weight:600">Pilates</span>
+            <div class="service-card-title">Pilates</div>
+            <div class="service-card-desc">Método Pilates com equipamentos para fortalecimento muscular, flexibilidade e correção postural.</div>
+            <div class="service-card-footer">
+              <div><div class="price">R$ 100</div><div class="duration">por sessão</div></div>
+              <span class="badge badge-gray">⏱ 55 min</span>
+            </div>
+          </div>
+          <div class="service-card">
+            <span class="service-dot" style="background:#f59e0b"></span><span style="font-size:12px;color:#64748b;font-weight:600">Pilates Kids</span>
+            <div class="service-card-title">Pilates Kids</div>
+            <div class="service-card-desc">Pilates adaptado para crianças, promovendo melhora da coordenação motora e postura.</div>
+            <div class="service-card-footer">
+              <div><div class="price">R$ 90</div><div class="duration">por sessão</div></div>
+              <span class="badge badge-gray">⏱ 45 min</span>
+            </div>
+          </div>
+          <div class="service-card">
+            <span class="service-dot" style="background:#8b5cf6"></span><span style="font-size:12px;color:#64748b;font-weight:600">Lib. Miofascial</span>
+            <div class="service-card-title">Liberação Miofascial</div>
+            <div class="service-card-desc">Técnica de liberação de tensões musculares e fáscias para alívio de dor e melhora da mobilidade.</div>
+            <div class="service-card-footer">
+              <div><div class="price">R$ 110</div><div class="duration">por sessão</div></div>
+              <span class="badge badge-gray">⏱ 40 min</span>
+            </div>
+          </div>
+          <div class="service-card">
+            <span class="service-dot" style="background:#ef4444"></span><span style="font-size:12px;color:#64748b;font-weight:600">Ventosaterapia</span>
+            <div class="service-card-title">Ventosaterapia</div>
+            <div class="service-card-desc">Tratamento com ventosas para alívio de dores, melhora da circulação e relaxamento muscular.</div>
+            <div class="service-card-footer">
+              <div><div class="price">R$ 80</div><div class="duration">por sessão</div></div>
+              <span class="badge badge-gray">⏱ 30 min</span>
+            </div>
+          </div>
+          <div class="service-card">
+            <span class="service-dot" style="background:#06b6d4"></span><span style="font-size:12px;color:#64748b;font-weight:600">Reabilitação</span>
+            <div class="service-card-title">Reabilitação</div>
+            <div class="service-card-desc">Programa completo de reabilitação pós-cirúrgica ou após lesões esportivas e ortopédicas.</div>
+            <div class="service-card-footer">
+              <div><div class="price">R$ 140</div><div class="duration">por sessão</div></div>
+              <span class="badge badge-gray">⏱ 60 min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== REPORTS ===== -->
+      <div class="page" id="page-reports">
+        <div class="stats-grid" style="margin-bottom:20px">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#dcfce7">📈</div>
+            <div>
+              <div class="stat-value" style="color:#16a34a">R$ 4.280</div>
+              <div class="stat-label">Receita Março</div>
+              <div class="stat-sub">+12% vs fev/26</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#dbeafe">🗓</div>
+            <div>
+              <div class="stat-value">48</div>
+              <div class="stat-label">Sessões Realizadas</div>
+              <div class="stat-sub">+5 vs fev/26</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#fef9c3">⭐</div>
+            <div>
+              <div class="stat-value">91%</div>
+              <div class="stat-label">Taxa de Comparecimento</div>
+              <div class="stat-sub">4 faltas no mês</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:#f3e8ff">👥</div>
+            <div>
+              <div class="stat-value">3</div>
+              <div class="stat-label">Novos Pacientes</div>
+              <div class="stat-sub">Em março/26</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-grid">
+          <!-- Revenue chart -->
+          <div class="card">
+            <div class="card-title">Receita Mensal — 2026</div>
+            <div class="chart-bar-wrap">
+              <div class="chart-bar">
+                <div class="chart-bar-val">3.1k</div>
+                <div class="chart-bar-fill" style="height:68%;background:#bcd2f5;border-radius:4px 4px 0 0"></div>
+                <div class="chart-bar-label">Jan</div>
+              </div>
+              <div class="chart-bar">
+                <div class="chart-bar-val">3.8k</div>
+                <div class="chart-bar-fill" style="height:84%;background:#bcd2f5;border-radius:4px 4px 0 0"></div>
+                <div class="chart-bar-label">Fev</div>
+              </div>
+              <div class="chart-bar">
+                <div class="chart-bar-val">4.3k</div>
+                <div class="chart-bar-fill" style="height:100%;background:#1a4e8f;border-radius:4px 4px 0 0"></div>
+                <div class="chart-bar-label">Mar</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service distribution -->
+          <div class="card">
+            <div class="card-title">Distribuição por Serviço</div>
+            <div class="donut-legend">
+              <div class="donut-row">
+                <div class="donut-dot" style="background:#1a4e8f"></div>
+                <div class="donut-name">Fisioterapia</div>
+                <div class="donut-val">14 pac.</div>
+                <div class="donut-pct">39%</div>
+              </div>
+              <div class="donut-row">
+                <div class="donut-dot" style="background:#78bc1f"></div>
+                <div class="donut-name">Pilates</div>
+                <div class="donut-val">11 pac.</div>
+                <div class="donut-pct">30%</div>
+              </div>
+              <div class="donut-row">
+                <div class="donut-dot" style="background:#06b6d4"></div>
+                <div class="donut-name">Reabilitação</div>
+                <div class="donut-val">7 pac.</div>
+                <div class="donut-pct">19%</div>
+              </div>
+              <div class="donut-row">
+                <div class="donut-dot" style="background:#f59e0b"></div>
+                <div class="donut-name">Pilates Kids</div>
+                <div class="donut-val">5 pac.</div>
+                <div class="donut-pct">14%</div>
+              </div>
+              <div class="donut-row">
+                <div class="donut-dot" style="background:#8b5cf6"></div>
+                <div class="donut-name">Lib. Miofascial</div>
+                <div class="donut-val">4 pac.</div>
+                <div class="donut-pct">11%</div>
+              </div>
+              <div class="donut-row">
+                <div class="donut-dot" style="background:#ef4444"></div>
+                <div class="donut-name">Ventosaterapia</div>
+                <div class="donut-val">2 pac.</div>
+                <div class="donut-pct">6%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Attendance per month -->
+          <div class="card">
+            <div class="card-title">Atendimentos por Mês</div>
+            <div class="chart-bar-wrap">
+              <div class="chart-bar">
+                <div class="chart-bar-val">28</div>
+                <div class="chart-bar-fill" style="height:60%;background:#bcd2f5;border-radius:4px 4px 0 0"></div>
+                <div class="chart-bar-label">Jan</div>
+              </div>
+              <div class="chart-bar">
+                <div class="chart-bar-val">43</div>
+                <div class="chart-bar-fill" style="height:90%;background:#bcd2f5;border-radius:4px 4px 0 0"></div>
+                <div class="chart-bar-label">Fev</div>
+              </div>
+              <div class="chart-bar">
+                <div class="chart-bar-val">48</div>
+                <div class="chart-bar-fill" style="height:100%;background:#1a4e8f;border-radius:4px 4px 0 0"></div>
+                <div class="chart-bar-label">Mar</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top patients -->
+          <div class="card">
+            <div class="card-title">Top Pacientes — Sessões</div>
+            <div class="service-row">
+              <div class="service-row-header"><span>Carla Mendes Souza</span><span>31</span></div>
+              <div class="progress"><div class="progress-bar" style="width:100%;background:#1a4e8f"></div></div>
+            </div>
+            <div class="service-row">
+              <div class="service-row-header"><span>Bruno Henrique Lima</span><span>24</span></div>
+              <div class="progress"><div class="progress-bar" style="width:77%;background:#78bc1f"></div></div>
+            </div>
+            <div class="service-row">
+              <div class="service-row-header"><span>Ana Paula Ferreira</span><span>18</span></div>
+              <div class="progress"><div class="progress-bar" style="width:58%;background:#06b6d4"></div></div>
+            </div>
+            <div class="service-row">
+              <div class="service-row-header"><span>Diego Rocha</span><span>12</span></div>
+              <div class="progress"><div class="progress-bar" style="width:39%;background:#8b5cf6"></div></div>
+            </div>
+            <div class="service-row" style="margin-bottom:0">
+              <div class="service-row-header"><span>Gabriela Nunes</span><span>8</span></div>
+              <div class="progress"><div class="progress-bar" style="width:26%;background:#f59e0b"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+  const titles = {
+    dashboard: 'Dashboard',
+    patients: 'Pacientes',
+    appointments: 'Agendamentos',
+    financial: 'Financeiro',
+    services: 'Serviços',
+    reports: 'Relatórios',
+  };
+
+  function showPage(name, el) {
+    // hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // deactivate all nav items
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    // show target
+    document.getElementById('page-' + name).classList.add('active');
+    // activate nav item
+    if (el) el.classList.add('active');
+    // update topbar title
+    document.getElementById('page-title').textContent = titles[name] || name;
+  }
+</script>
+</body>
+</html>
