@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DNZ Outlet — Streetwear | Boituva-SP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: '#F0B429',
+            'gold-dark': '#C89020',
+          },
+          fontFamily: {
+            display: ['Bebas Neue', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .font-display { font-family: 'Bebas Neue', sans-serif; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: #F0B429; border-radius: 3px; }
+
+    /* ── Marquee ── */
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-inner { animation: marquee 18s linear infinite; white-space: nowrap; display: flex; }
+    .marquee-inner:hover { animation-play-state: paused; }
+
+    /* ── Product card ── */
+    .product-card { transition: transform .25s ease, box-shadow .25s ease; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px #F0B429, 0 8px 32px rgba(240,180,41,.18); }
+    .product-card:hover .card-btn { background: #F0B429; color: #000; }
+
+    /* ── Hero gradient ── */
+    .hero-bg {
+      background: radial-gradient(ellipse 80% 60% at 60% 40%, #1a1400 0%, #000 70%),
+                  linear-gradient(160deg, #0a0a0a 0%, #111 100%);
+    }
+
+    /* ── Gold glow ── */
+    .glow { box-shadow: 0 0 24px rgba(240,180,41,.5); }
+    .text-glow { text-shadow: 0 0 30px rgba(240,180,41,.6); }
+
+    /* ── Slide-in cart ── */
+    #cart-drawer { transition: transform .35s cubic-bezier(.4,0,.2,1); transform: translateX(100%); }
+    #cart-drawer.open { transform: translateX(0); }
+    #cart-overlay { transition: opacity .35s ease; }
+
+    /* ── Badge pulse ── */
+    @keyframes badge-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+    .badge-pulse { animation: badge-pulse 1.8s ease-in-out infinite; }
+
+    /* ── Countdown ── */
+    .countdown-digit { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; line-height:1; }
+
+    /* ── Category card ── */
+    .cat-card { transition: transform .2s, box-shadow .2s; }
+    .cat-card:hover { transform: scale(1.04); box-shadow: 0 0 0 2px #F0B429; }
+
+    /* ── Fade in up ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { animation: fadeUp .5s ease forwards; }
+
+    /* ── Nav link hover ── */
+    .nav-link { position:relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#F0B429; transition:width .2s; }
+    .nav-link:hover::after { width:100%; }
+
+    /* ── Scroll to top ── */
+    #scroll-top { transition: opacity .3s, transform .3s; }
+
+    /* ── Star rating ── */
+    .star { color: #F0B429; }
+
+    /* ── Product img zoom ── */
+    .img-wrap { overflow: hidden; }
+    .img-wrap img { transition: transform .4s ease; }
+    .product-card:hover .img-wrap img { transform: scale(1.06); }
+  </style>
+</head>
+
+<body class="bg-black text-white min-h-screen">
+
+  <!-- ══════════════════════════════════════
+       ANNOUNCEMENT BAR
+  ══════════════════════════════════════ -->
+  <div class="bg-[#F0B429] text-black text-xs font-semibold py-2 overflow-hidden relative">
+    <div class="marquee-inner gap-0">
+      <!-- duplicated for seamless loop -->
+      <span class="inline-flex items-center gap-6 px-6">
+        🔥 COMPRE UMA CALÇA E GANHE UMA CAMISETA &nbsp;•&nbsp;
+        📦 FRETE GRÁTIS ACIMA DE R$299 &nbsp;•&nbsp;
+        🇧🇷 ENTREGAMOS PARA TODO O BRASIL &nbsp;•&nbsp;
+        💎 QUALIDADE, PROCEDÊNCIA E PREÇO BAIXO &nbsp;•&nbsp;
+        📍 RUA SÃO ROQUE, 68 – CENTRO – BOITUVA/SP &nbsp;•&nbsp;
+        📲 NOVIDADES TODO DIA NOS STORIES &nbsp;•&nbsp;
+      </span>
+      <span class="inline-flex items-center gap-6 px-6">
+        🔥 COMPRE UMA CALÇA E GANHE UMA CAMISETA &nbsp;•&nbsp;
+        📦 FRETE GRÁTIS ACIMA DE R$299 &nbsp;•&nbsp;
+        🇧🇷 ENTREGAMOS PARA TODO O BRASIL &nbsp;•&nbsp;
+        💎 QUALIDADE, PROCEDÊNCIA E PREÇO BAIXO &nbsp;•&nbsp;
+        📍 RUA SÃO ROQUE, 68 – CENTRO – BOITUVA/SP &nbsp;•&nbsp;
+        📲 NOVIDADES TODO DIA NOS STORIES &nbsp;•&nbsp;
+      </span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════ -->
+  <header id="navbar" class="sticky top-0 z-50 bg-black border-b border-white/10 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2 shrink-0">
+        <div class="w-10 h-10 rounded-full border-2 border-[#F0B429] bg-[#111] flex items-center justify-center">
+          <span class="font-display text-[#F0B429] text-lg leading-none">DNZ</span>
+        </div>
+        <div class="hidden sm:block">
+          <div class="font-display text-white text-xl leading-none tracking-wider">DNZ</div>
+          <div class="text-[#F0B429] text-[10px] font-bold tracking-[0.25em] leading-none">OUTLET</div>
+        </div>
+      </a>
+
+      <!-- Nav links (desktop) -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-white/80">
+        <a href="#" class="nav-link hover:text-white">Início</a>
+        <a href="#catalogo" class="nav-link hover:text-white">Catálogo</a>
+        <a href="#calcas" class="nav-link hover:text-white">Calças</a>
+        <a href="#tenis" class="nav-link hover:text-white">Tênis</a>
+        <a href="#bones" class="nav-link hover:text-white">Bonés</a>
+        <a href="#promocoes" class="nav-link text-[#F0B429] font-bold hover:text-yellow-300">Promoções 🔥</a>
+      </nav>
+
+      <!-- Right actions -->
+      <div class="flex items-center gap-3">
+        <!-- Search (desktop) -->
+        <div class="hidden md:flex items-center bg-[#111] border border-white/10 rounded-full px-3 py-1.5 gap-2 text-sm">
+          <svg class="w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Buscar produto..." class="bg-transparent text-sm text-white/80 placeholder-white/30 outline-none w-36" />
+        </div>
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/5515999999999?text=Olá!%20Vim%20pelo%20site%20e%20quero%20ver%20os%20produtos%20da%20DNZ%20Outlet!"
+           target="_blank"
+           class="hidden sm:flex items-center gap-1.5 bg-[#25D366] hover:bg-[#1ebe5d] text-black text-xs font-bold px-3 py-2 rounded-full transition-colors">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+
+        <!-- Cart -->
+        <button onclick="toggleCart()" class="relative p-2 rounded-full hover:bg-white/10 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 7H4l1-7z"/></svg>
+          <span id="cart-badge" class="absolute -top-1 -right-1 bg-[#F0B429] text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center badge-pulse">0</span>
+        </button>
+
+        <!-- Hamburger (mobile) -->
+        <button onclick="toggleMenu()" class="md:hidden p-2 rounded-full hover:bg-white/10">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-[#0a0a0a] border-t border-white/10 px-4 py-4">
+      <div class="flex flex-col gap-3 text-sm font-medium">
+        <a href="#" class="text-white/80 hover:text-[#F0B429]">Início</a>
+        <a href="#catalogo" class="text-white/80 hover:text-[#F0B429]">Catálogo</a>
+        <a href="#calcas" class="text-white/80 hover:text-[#F0B429]">Calças</a>
+        <a href="#tenis" class="text-white/80 hover:text-[#F0B429]">Tênis</a>
+        <a href="#bones" class="text-white/80 hover:text-[#F0B429]">Bonés</a>
+        <a href="#promocoes" class="text-[#F0B429] font-bold">Promoções 🔥</a>
+        <div class="flex items-center bg-[#111] border border-white/10 rounded-full px-3 py-2 gap-2">
+          <svg class="w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Buscar..." class="bg-transparent text-sm text-white/80 placeholder-white/30 outline-none flex-1" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <section class="hero-bg min-h-[92vh] flex items-center relative overflow-hidden">
+    <!-- Decorative grid lines -->
+    <div class="absolute inset-0 opacity-[0.04]"
+         style="background-image: linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:60px 60px"></div>
+
+    <!-- Gold orb glow -->
+    <div class="absolute right-1/4 top-1/4 w-96 h-96 bg-[#F0B429]/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 w-full py-20 grid md:grid-cols-2 gap-12 items-center">
+      <!-- Text column -->
+      <div class="fade-up">
+        <div class="inline-flex items-center gap-2 bg-[#F0B429]/10 border border-[#F0B429]/30 rounded-full px-4 py-1.5 text-[#F0B429] text-xs font-semibold mb-6">
+          <span class="w-2 h-2 bg-[#F0B429] rounded-full animate-pulse"></span>
+          Boituva · São Paulo · Brasil
+        </div>
+
+        <h1 class="font-display text-[clamp(4rem,12vw,9rem)] leading-none text-white text-glow mb-2">
+          DNZ
+        </h1>
+        <h2 class="font-display text-[clamp(1.6rem,5vw,3.5rem)] leading-none text-[#F0B429] tracking-widest mb-6">
+          OUTLET
+        </h2>
+
+        <p class="text-white/60 text-lg leading-relaxed mb-3 max-w-md">
+          Vivências &amp; Vendas. Nike, Adidas, Balenciaga, Balmain e muito mais — originais, com procedência e <span class="text-[#F0B429] font-semibold">preço de outlet.</span>
+        </p>
+        <p class="text-white/40 text-sm mb-8">
+          📍 Rua São Roque, 68 – Centro – Boituva/SP
+        </p>
+
+        <div class="flex flex-wrap gap-3">
+          <a href="#catalogo"
+             class="bg-[#F0B429] hover:bg-yellow-300 text-black font-bold px-8 py-3.5 rounded-full text-sm transition-all hover:scale-105 active:scale-95">
+            VER CATÁLOGO
+          </a>
+          <a href="https://wa.me/5515999999999?text=Oi!%20Quero%20ver%20os%20produtos%20da%20DNZ%20Outlet!" target="_blank"
+             class="border border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-black font-bold px-8 py-3.5 rounded-full text-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            COMPRAR
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="mt-10 flex gap-6 text-center">
+          <div>
+            <div class="font-display text-3xl text-[#F0B429]">6K+</div>
+            <div class="text-white/40 text-xs">Seguidores</div>
+          </div>
+          <div class="w-px bg-white/10"></div>
+          <div>
+            <div class="font-display text-3xl text-[#F0B429]">214</div>
+            <div class="text-white/40 text-xs">Posts</div>
+          </div>
+          <div class="w-px bg-white/10"></div>
+          <div>
+            <div class="font-display text-3xl text-[#F0B429]">100%</div>
+            <div class="text-white/40 text-xs">Original</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product showcase column -->
+      <div class="relative hidden md:flex justify-center items-center">
+        <div class="relative w-72 h-96">
+          <!-- Main product card -->
+          <div class="absolute inset-0 bg-[#111] rounded-2xl border border-white/10 overflow-hidden">
+            <img src="https://picsum.photos/seed/dnzhero1/400/500" alt="DNZ Produto em destaque"
+                 class="w-full h-full object-cover opacity-80" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+            <div class="absolute bottom-4 left-4 right-4">
+              <span class="bg-[#F0B429] text-black text-xs font-black px-2 py-0.5 rounded">OFERTA</span>
+              <p class="text-white font-bold mt-1">Nike Tech Fleece</p>
+              <p class="text-[#F0B429] font-display text-2xl">R$ 279,90</p>
+            </div>
+          </div>
+          <!-- Floating badge -->
+          <div class="absolute -top-4 -right-4 bg-[#F0B429] text-black rounded-full w-16 h-16 flex flex-col items-center justify-center shadow-lg glow">
+            <span class="font-display text-xl leading-none">-20%</span>
+            <span class="text-[9px] font-bold">OFF</span>
+          </div>
+        </div>
+        <!-- Secondary card peeking -->
+        <div class="absolute -left-4 bottom-8 w-40 h-52 bg-[#1a1a1a] rounded-xl border border-white/10 overflow-hidden rotate-[-8deg] opacity-60">
+          <img src="https://picsum.photos/seed/dnzhero2/300/400" alt="" class="w-full h-full object-cover" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/30 text-xs animate-bounce">
+      <span>Role para baixo</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       BRAND MARQUEE
+  ══════════════════════════════════════ -->
+  <div class="border-y border-white/10 bg-[#0a0a0a] py-3 overflow-hidden">
+    <div class="marquee-inner" style="animation-duration:12s">
+      <span class="inline-flex items-center gap-8 px-8 text-white/25 text-sm font-bold tracking-widest uppercase">
+        NIKE &nbsp;•&nbsp; ADIDAS &nbsp;•&nbsp; BALENCIAGA &nbsp;•&nbsp; BALMAIN &nbsp;•&nbsp; FATAL SURF &nbsp;•&nbsp; QUIKSILVER &nbsp;•&nbsp; VANS &nbsp;•&nbsp; LOUIS VUITTON &nbsp;•&nbsp; MIZUNO &nbsp;•&nbsp;
+      </span>
+      <span class="inline-flex items-center gap-8 px-8 text-white/25 text-sm font-bold tracking-widest uppercase">
+        NIKE &nbsp;•&nbsp; ADIDAS &nbsp;•&nbsp; BALENCIAGA &nbsp;•&nbsp; BALMAIN &nbsp;•&nbsp; FATAL SURF &nbsp;•&nbsp; QUIKSILVER &nbsp;•&nbsp; VANS &nbsp;•&nbsp; LOUIS VUITTON &nbsp;•&nbsp; MIZUNO &nbsp;•&nbsp;
+      </span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       CATEGORIES
+  ══════════════════════════════════════ -->
+  <section class="max-w-7xl mx-auto px-4 py-14">
+    <h2 class="font-display text-3xl text-white mb-8">CATEGORIAS</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+
+      <a href="#roupas" class="cat-card bg-[#111] border border-white/10 rounded-xl p-4 flex flex-col items-center gap-3 group cursor-pointer">
+        <div class="w-12 h-12 bg-[#F0B429]/10 rounded-full flex items-center justify-center text-2xl group-hover:bg-[#F0B429]/20 transition-colors">👕</div>
+        <span class="text-white text-sm font-semibold">Roupas</span>
+        <span class="text-white/30 text-xs">Camisetas, moletons</span>
+      </a>
+
+      <a href="#calcas" class="cat-card bg-[#111] border border-white/10 rounded-xl p-4 flex flex-col items-center gap-3 group cursor-pointer">
+        <div class="w-12 h-12 bg-[#F0B429]/10 rounded-full flex items-center justify-center text-2xl group-hover:bg-[#F0B429]/20 transition-colors">👖</div>
+        <span class="text-white text-sm font-semibold">Calças</span>
+        <span class="text-white/30 text-xs">Jeans, jogger</span>
+      </a>
+
+      <a href="#jaquetas" class="cat-card bg-[#111] border border-white/10 rounded-xl p-4 flex flex-col items-center gap-3 group cursor-pointer">
+        <div class="w-12 h-12 bg-[#F0B429]/10 rounded-full flex items-center justify-center text-2xl group-hover:bg-[#F0B429]/20 transition-colors">🧥</div>
+        <span class="text-white text-sm font-semibold">Jaquetas</span>
+        <span class="text-white/30 text-xs">Tech Fleece, agasalhos</span>
+      </a>
+
+      <a href="#tenis" class="cat-card bg-[#111] border border-white/10 rounded-xl p-4 flex flex-col items-center gap-3 group cursor-pointer">
+        <div class="w-12 h-12 bg-[#F0B429]/10 rounded-full flex items-center justify-center text-2xl group-hover:bg-[#F0B429]/20 transition-colors">👟</div>
+        <span class="text-white text-sm font-semibold">Tênis</span>
+        <span class="text-white/30 text-xs">Nike, Vans, Mizuno</span>
+      </a>
+
+      <a href="#bones" class="cat-card bg-[#111] border border-white/10 rounded-xl p-4 flex flex-col items-center gap-3 group cursor-pointer">
+        <div class="w-12 h-12 bg-[#F0B429]/10 rounded-full flex items-center justify-center text-2xl group-hover:bg-[#F0B429]/20 transition-colors">🧢</div>
+        <span class="text-white text-sm font-semibold">Bonés</span>
+        <span class="text-white/30 text-xs">Aba reta, premium</span>
+      </a>
+
+      <a href="#acessorios" class="cat-card bg-[#111] border border-white/10 rounded-xl p-4 flex flex-col items-center gap-3 group cursor-pointer">
+        <div class="w-12 h-12 bg-[#F0B429]/10 rounded-full flex items-center justify-center text-2xl group-hover:bg-[#F0B429]/20 transition-colors">🌟</div>
+        <span class="text-white text-sm font-semibold">Acessórios</span>
+        <span class="text-white/30 text-xs">Perfumes, meias</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FLASH SALE
+  ══════════════════════════════════════ -->
+  <section id="promocoes" class="bg-[#0d0d0d] border-y border-[#F0B429]/20 py-14">
+    <div class="max-w-7xl mx-auto px-4">
+
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <div class="flex items-center gap-3 mb-1">
+            <span class="bg-[#F0B429] text-black text-xs font-black px-3 py-1 rounded-full badge-pulse">FLASH SALE</span>
+            <span class="text-white/50 text-sm">Oferta por tempo limitado</span>
+          </div>
+          <h2 class="font-display text-4xl text-white">PROMOÇÕES DO DIA 🔥</h2>
+        </div>
+        <!-- Countdown -->
+        <div class="flex items-center gap-2 bg-[#111] border border-[#F0B429]/30 rounded-xl px-4 py-3">
+          <svg class="w-5 h-5 text-[#F0B429]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <div class="flex items-center gap-1">
+            <div class="text-center"><span id="cd-h" class="countdown-digit text-[#F0B429]">08</span><div class="text-white/30 text-[9px]">HRS</div></div>
+            <span class="countdown-digit text-white/30 mb-3">:</span>
+            <div class="text-center"><span id="cd-m" class="countdown-digit text-[#F0B429]">34</span><div class="text-white/30 text-[9px]">MIN</div></div>
+            <span class="countdown-digit text-white/30 mb-3">:</span>
+            <div class="text-center"><span id="cd-s" class="countdown-digit text-[#F0B429]">00</span><div class="text-white/30 text-[9px]">SEG</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Sale product 1 -->
+        <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Calça Jogadora Nike Original', 189.90)">
+          <div class="img-wrap h-64 relative">
+            <img src="https://picsum.photos/seed/dnzflash1/600/400" alt="Calça Jogadora Nike" class="w-full h-full object-cover" />
+            <div class="absolute top-3 left-3 flex gap-2">
+              <span class="bg-[#FF3B30] text-white text-xs font-black px-2 py-0.5 rounded">-32%</span>
+              <span class="bg-[#F0B429] text-black text-xs font-black px-2 py-0.5 rounded">ORIGINAL</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <p class="text-white/40 text-xs font-semibold uppercase tracking-widest mb-1">Nike</p>
+            <h3 class="text-white font-semibold mb-2">Calça Jogadora Nike Original</h3>
+            <div class="flex items-center gap-1 mb-3">
+              <span class="star text-sm">★★★★★</span>
+              <span class="text-white/30 text-xs">(38)</span>
+            </div>
+            <div class="flex items-end justify-between">
+              <div>
+                <p class="text-white/30 text-xs line-through">R$ 280,00</p>
+                <p class="text-[#F0B429] font-display text-2xl">R$ 189,90</p>
+              </div>
+              <button class="card-btn bg-white/10 hover:bg-[#F0B429] hover:text-black text-white text-xs font-bold px-4 py-2 rounded-full transition-all">
+                Comprar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sale product 2 -->
+        <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Tênis Vans Old Skool', 249.90)">
+          <div class="img-wrap h-64 relative">
+            <img src="https://picsum.photos/seed/dnzflash2/600/400" alt="Vans Old Skool" class="w-full h-full object-cover" />
+            <div class="absolute top-3 left-3 flex gap-2">
+              <span class="bg-[#FF3B30] text-white text-xs font-black px-2 py-0.5 rounded">-29%</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <p class="text-white/40 text-xs font-semibold uppercase tracking-widest mb-1">Vans</p>
+            <h3 class="text-white font-semibold mb-2">Tênis Vans Old Skool Preto/Branco</h3>
+            <div class="flex items-center gap-1 mb-3">
+              <span class="star text-sm">★★★★★</span>
+              <span class="text-white/30 text-xs">(52)</span>
+            </div>
+            <div class="flex items-end justify-between">
+              <div>
+                <p class="text-white/30 text-xs line-through">R$ 350,00</p>
+                <p class="text-[#F0B429] font-display text-2xl">R$ 249,90</p>
+              </div>
+              <button class="card-btn bg-white/10 hover:bg-[#F0B429] hover:text-black text-white text-xs font-bold px-4 py-2 rounded-full transition-all">
+                Comprar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sale product 3 -->
+        <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Perfume Angel Isabelle Premium', 79.90)">
+          <div class="img-wrap h-64 relative">
+            <img src="https://picsum.photos/seed/dnzflash3/600/400" alt="Perfume Angel" class="w-full h-full object-cover" />
+            <div class="absolute top-3 left-3 flex gap-2">
+              <span class="bg-[#FF3B30] text-white text-xs font-black px-2 py-0.5 rounded">-33%</span>
+              <span class="bg-[#30D158] text-black text-xs font-black px-2 py-0.5 rounded">NOVO</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <p class="text-white/40 text-xs font-semibold uppercase tracking-widest mb-1">Premium Collection</p>
+            <h3 class="text-white font-semibold mb-2">Perfume Angel Isabelle</h3>
+            <div class="flex items-center gap-1 mb-3">
+              <span class="star text-sm">★★★★</span><span class="star text-sm opacity-30">★</span>
+              <span class="text-white/30 text-xs">(19)</span>
+            </div>
+            <div class="flex items-end justify-between">
+              <div>
+                <p class="text-white/30 text-xs line-through">R$ 120,00</p>
+                <p class="text-[#F0B429] font-display text-2xl">R$ 79,90</p>
+              </div>
+              <button class="card-btn bg-white/10 hover:bg-[#F0B429] hover:text-black text-white text-xs font-bold px-4 py-2 rounded-full transition-all">
+                Comprar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       MAIS VENDIDOS
+  ══════════════════════════════════════ -->
+  <section id="catalogo" class="max-w-7xl mx-auto px-4 py-16">
+
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <p class="text-[#F0B429] text-xs font-bold tracking-widest uppercase mb-1">Mais procurados</p>
+        <h2 class="font-display text-4xl text-white">MAIS VENDIDOS</h2>
+      </div>
+      <a href="#catalogo" class="text-sm text-[#F0B429] hover:underline font-medium">Ver todos →</a>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+
+      <!-- P1: Nike Tech Fleece -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Jaqueta Nike Tech Fleece', 279.90)">
+        <div class="img-wrap h-52 relative">
+          <img src="https://picsum.photos/seed/dnzp1/400/500" alt="Nike Tech Fleece" class="w-full h-full object-cover" />
+          <div class="absolute top-2 left-2"><span class="bg-[#FF3B30] text-white text-[10px] font-black px-2 py-0.5 rounded">-20%</span></div>
+        </div>
+        <div class="p-3">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Nike</p>
+          <h3 class="text-white text-sm font-semibold leading-tight mb-1">Jaqueta Tech Fleece Windrunner</h3>
+          <div class="flex items-center gap-0.5 mb-2"><span class="star text-xs">★★★★★</span><span class="text-white/30 text-[10px] ml-1">(47)</span></div>
+          <p class="text-white/30 text-xs line-through">R$ 350,00</p>
+          <p class="text-[#F0B429] font-display text-xl">R$ 279,90</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+      <!-- P2: Adidas AMG -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Agasalho Adidas Mercedes AMG', 299.90)">
+        <div class="img-wrap h-52 relative">
+          <img src="https://picsum.photos/seed/dnzp2/400/500" alt="Adidas AMG" class="w-full h-full object-cover" />
+          <div class="absolute top-2 left-2"><span class="bg-[#FF3B30] text-white text-[10px] font-black px-2 py-0.5 rounded">-29%</span></div>
+        </div>
+        <div class="p-3">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Adidas</p>
+          <h3 class="text-white text-sm font-semibold leading-tight mb-1">Agasalho Mercedes AMG</h3>
+          <div class="flex items-center gap-0.5 mb-2"><span class="star text-xs">★★★★★</span><span class="text-white/30 text-[10px] ml-1">(31)</span></div>
+          <p class="text-white/30 text-xs line-through">R$ 420,00</p>
+          <p class="text-[#F0B429] font-display text-xl">R$ 299,90</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+      <!-- P3: Balenciaga -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Camiseta Balenciaga Oversized', 120.00)">
+        <div class="img-wrap h-52 relative">
+          <img src="https://picsum.photos/seed/dnzp3/400/500" alt="Balenciaga" class="w-full h-full object-cover" />
+        </div>
+        <div class="p-3">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Balenciaga</p>
+          <h3 class="text-white text-sm font-semibold leading-tight mb-1">Camiseta Oversized Premium</h3>
+          <div class="flex items-center gap-0.5 mb-2"><span class="star text-xs">★★★★★</span><span class="text-white/30 text-[10px] ml-1">(89)</span></div>
+          <p class="text-[#F0B429] font-display text-xl">R$ 120,00</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+      <!-- P4: Fatal Surf -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Calça Jeans Fatal Surf Original', 100.00)">
+        <div class="img-wrap h-52 relative">
+          <img src="https://picsum.photos/seed/dnzp4/400/500" alt="Fatal Surf" class="w-full h-full object-cover" />
+          <div class="absolute top-2 left-2 flex gap-1">
+            <span class="bg-[#FF3B30] text-white text-[10px] font-black px-2 py-0.5 rounded">-33%</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Fatal Surf</p>
+          <h3 class="text-white text-sm font-semibold leading-tight mb-1">Calça Jeans Original</h3>
+          <div class="flex items-center gap-0.5 mb-2"><span class="star text-xs">★★★★</span><span class="star text-xs opacity-30">★</span><span class="text-white/30 text-[10px] ml-1">(63)</span></div>
+          <p class="text-white/30 text-xs line-through">R$ 150,00</p>
+          <p class="text-[#F0B429] font-display text-xl">R$ 100,00</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+      <!-- P5: Nike Air Force -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Tênis Nike Air Force 1', 319.90)">
+        <div class="img-wrap h-52 relative">
+          <img src="https://picsum.photos/seed/dnzp5/400/500" alt="Air Force" class="w-full h-full object-cover" />
+          <div class="absolute top-2 right-2"><span class="bg-[#30D158] text-black text-[10px] font-black px-2 py-0.5 rounded">NOVO</span></div>
+        </div>
+        <div class="p-3">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Nike</p>
+          <h3 class="text-white text-sm font-semibold leading-tight mb-1">Tênis Air Force 1 Branco</h3>
+          <div class="flex items-center gap-0.5 mb-2"><span class="star text-xs">★★★★★</span><span class="text-white/30 text-[10px] ml-1">(74)</span></div>
+          <p class="text-[#F0B429] font-display text-xl">R$ 319,90</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+      <!-- P6: Boné LV -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Boné LV Premium Collection', 89.90)">
+        <div class="img-wrap h-52 relative">
+          <img src="https://picsum.photos/seed/dnzp6/400/500" alt="Boné LV" class="w-full h-full object-cover" />
+        </div>
+        <div class="p-3">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Premium Collection</p>
+          <h3 class="text-white text-sm font-semibold leading-tight mb-1">Boné LV Premium Aba Reta</h3>
+          <div class="flex items-center gap-0.5 mb-2"><span class="star text-xs">★★★★</span><span class="star text-xs opacity-30">★</span><span class="text-white/30 text-[10px] ml-1">(28)</span></div>
+          <p class="text-[#F0B429] font-display text-xl">R$ 89,90</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+      <!-- P7: Moletom Nike -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Moletom Nike com Capuz', 229.90)">
+        <div class="img-wrap h-52 relative">
+          <img src="https://picsum.photos/seed/dnzp7/400/500" alt="Moletom Nike" class="w-full h-full object-cover" />
+        </div>
+        <div class="p-3">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Nike</p>
+          <h3 class="text-white text-sm font-semibold leading-tight mb-1">Moletom com Capuz Premium</h3>
+          <div class="flex items-center gap-0.5 mb-2"><span class="star text-xs">★★★★★</span><span class="text-white/30 text-[10px] ml-1">(41)</span></div>
+          <p class="text-[#F0B429] font-display text-xl">R$ 229,90</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+      <!-- P8: Balmain -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Camiseta Balmain Premium', 120.00)">
+        <div class="img-wrap h-52 relative">
+          <img src="https://picsum.photos/seed/dnzp8/400/500" alt="Balmain" class="w-full h-full object-cover" />
+        </div>
+        <div class="p-3">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Balmain</p>
+          <h3 class="text-white text-sm font-semibold leading-tight mb-1">Camiseta Balmain Premium</h3>
+          <div class="flex items-center gap-0.5 mb-2"><span class="star text-xs">★★★★★</span><span class="text-white/30 text-[10px] ml-1">(57)</span></div>
+          <p class="text-[#F0B429] font-display text-xl">R$ 120,00</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       PROMO BANNER: CALÇA + CAMISETA
+  ══════════════════════════════════════ -->
+  <section class="relative overflow-hidden bg-[#F0B429] py-16">
+    <div class="absolute inset-0 opacity-10"
+         style="background-image:repeating-linear-gradient(45deg,#000 0,#000 1px,transparent 0,transparent 50%);background-size:10px 10px"></div>
+    <div class="max-w-7xl mx-auto px-4 relative flex flex-col md:flex-row items-center justify-between gap-8">
+      <div>
+        <p class="text-black/60 text-sm font-bold uppercase tracking-widest mb-2">Promoção exclusiva</p>
+        <h2 class="font-display text-[clamp(2.5rem,6vw,5rem)] text-black leading-none">
+          COMPRE UMA CALÇA<br/>E GANHE UMA<br/><span class="text-white" style="text-shadow:0 2px 8px rgba(0,0,0,.3)">CAMISETA</span>
+        </h2>
+        <p class="text-black/70 mt-3 max-w-sm">Compre qualquer calça jogadora original e escolha uma camiseta da nossa arara totalmente de graça!</p>
+      </div>
+      <div class="flex flex-col gap-3 items-center md:items-end">
+        <a href="https://wa.me/5515999999999?text=Quero%20aproveitar%20a%20promo%20calça%20%2B%20camiseta!" target="_blank"
+           class="bg-black hover:bg-[#111] text-white font-bold px-10 py-4 rounded-full text-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          QUERO APROVEITAR
+        </a>
+        <p class="text-black/50 text-xs">*Enquanto durar o estoque</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       NOVIDADES
+  ══════════════════════════════════════ -->
+  <section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <p class="text-[#F0B429] text-xs font-bold tracking-widest uppercase mb-1">Acabou de chegar</p>
+        <h2 class="font-display text-4xl text-white">NOVIDADES</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+
+      <!-- N1 -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Conjunto Agasalho Nike', 349.90)">
+        <div class="img-wrap h-56 relative">
+          <img src="https://picsum.photos/seed/dnzn1/400/500" alt="Agasalho Nike" class="w-full h-full object-cover" />
+          <div class="absolute top-2 right-2"><span class="bg-[#30D158] text-black text-[10px] font-black px-2 py-0.5 rounded">NOVO</span></div>
+        </div>
+        <div class="p-4">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Nike</p>
+          <h3 class="text-white text-sm font-semibold mb-1">Conjunto Agasalho Nike</h3>
+          <p class="text-white/30 text-xs line-through">R$ 480,00</p>
+          <p class="text-[#F0B429] font-display text-xl">R$ 349,90</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+      <!-- N2 -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Boné Quiksilver Aba Reta', 69.90)">
+        <div class="img-wrap h-56 relative">
+          <img src="https://picsum.photos/seed/dnzn2/400/500" alt="Boné Quiksilver" class="w-full h-full object-cover" />
+          <div class="absolute top-2 right-2"><span class="bg-[#30D158] text-black text-[10px] font-black px-2 py-0.5 rounded">NOVO</span></div>
+        </div>
+        <div class="p-4">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Quiksilver</p>
+          <h3 class="text-white text-sm font-semibold mb-1">Boné Quiksilver Aba Reta</h3>
+          <p class="text-[#F0B429] font-display text-xl">R$ 69,90</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+      <!-- N3 -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Short Tactel Premium', 79.90)">
+        <div class="img-wrap h-56 relative">
+          <img src="https://picsum.photos/seed/dnzn3/400/500" alt="Short Tactel" class="w-full h-full object-cover" />
+          <div class="absolute top-2 right-2"><span class="bg-[#30D158] text-black text-[10px] font-black px-2 py-0.5 rounded">NOVO</span></div>
+        </div>
+        <div class="p-4">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Premium</p>
+          <h3 class="text-white text-sm font-semibold mb-1">Short Tactel Premium Azul</h3>
+          <p class="text-[#F0B429] font-display text-xl">R$ 79,90</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+      <!-- N4 -->
+      <div class="product-card bg-[#111] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="addToCart('Camiseta Nike Dry-Fit', 89.90)">
+        <div class="img-wrap h-56 relative">
+          <img src="https://picsum.photos/seed/dnzn4/400/500" alt="Camiseta Nike" class="w-full h-full object-cover" />
+          <div class="absolute top-2 right-2"><span class="bg-[#30D158] text-black text-[10px] font-black px-2 py-0.5 rounded">NOVO</span></div>
+        </div>
+        <div class="p-4">
+          <p class="text-white/30 text-[10px] font-bold uppercase tracking-widest">Nike</p>
+          <h3 class="text-white text-sm font-semibold mb-1">Camiseta Nike Dry-Fit Original</h3>
+          <p class="text-[#F0B429] font-display text-xl">R$ 89,90</p>
+          <button class="card-btn mt-2 w-full bg-white/10 text-white text-xs font-bold py-2 rounded-full transition-all">+ Carrinho</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       INSTAGRAM FEED MOCKUP
+  ══════════════════════════════════════ -->
+  <section class="bg-[#0a0a0a] border-y border-white/10 py-16">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-8">
+        <p class="text-[#F0B429] text-xs font-bold tracking-widest uppercase mb-2">Redes Sociais</p>
+        <h2 class="font-display text-3xl text-white">SIGA <a href="https://www.instagram.com/dnzoutlet.boituva" target="_blank" class="text-[#F0B429] hover:underline">@DNZOUTLET.BOITUVA</a></h2>
+        <p class="text-white/40 text-sm mt-2">Novidades e promoções exclusivas todos os dias nos stories!</p>
+      </div>
+      <!-- Grid fake instagram -->
+      <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+        <a href="https://www.instagram.com/dnzoutlet.boituva" target="_blank"
+           class="relative group aspect-square rounded-lg overflow-hidden bg-[#111]">
+          <img src="https://picsum.photos/seed/ig1/300/300" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/dnzoutlet.boituva" target="_blank" class="relative group aspect-square rounded-lg overflow-hidden bg-[#111]">
+          <img src="https://picsum.photos/seed/ig2/300/300" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/dnzoutlet.boituva" target="_blank" class="relative group aspect-square rounded-lg overflow-hidden bg-[#111]">
+          <img src="https://picsum.photos/seed/ig3/300/300" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/dnzoutlet.boituva" target="_blank" class="relative group aspect-square rounded-lg overflow-hidden bg-[#111]">
+          <img src="https://picsum.photos/seed/ig4/300/300" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/dnzoutlet.boituva" target="_blank" class="relative group aspect-square rounded-lg overflow-hidden bg-[#111] hidden md:block">
+          <img src="https://picsum.photos/seed/ig5/300/300" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/dnzoutlet.boituva" target="_blank" class="relative group aspect-square rounded-lg overflow-hidden bg-[#111] hidden md:block">
+          <img src="https://picsum.photos/seed/ig6/300/300" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-[#F0B429]/20 flex items-center justify-center">
+            <div class="text-center">
+              <svg class="w-10 h-10 text-[#F0B429] mx-auto mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              <p class="text-[#F0B429] font-bold text-sm">Ver mais</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       TRUST BADGES
+  ══════════════════════════════════════ -->
+  <section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+      <div class="bg-[#111] border border-white/10 rounded-2xl p-5 flex items-center gap-4">
+        <div class="w-12 h-12 bg-[#F0B429]/10 rounded-xl flex items-center justify-center text-2xl shrink-0">🏆</div>
+        <div>
+          <p class="text-white font-bold text-sm">Qualidade Garantida</p>
+          <p class="text-white/40 text-xs">Peças originais com procedência</p>
+        </div>
+      </div>
+
+      <div class="bg-[#111] border border-white/10 rounded-2xl p-5 flex items-center gap-4">
+        <div class="w-12 h-12 bg-[#F0B429]/10 rounded-xl flex items-center justify-center text-2xl shrink-0">📦</div>
+        <div>
+          <p class="text-white font-bold text-sm">Entregamos ao Brasil</p>
+          <p class="text-white/40 text-xs">Para todo o território nacional</p>
+        </div>
+      </div>
+
+      <div class="bg-[#111] border border-white/10 rounded-2xl p-5 flex items-center gap-4">
+        <div class="w-12 h-12 bg-[#F0B429]/10 rounded-xl flex items-center justify-center text-2xl shrink-0">💬</div>
+        <div>
+          <p class="text-white font-bold text-sm">Atendimento Rápido</p>
+          <p class="text-white/40 text-xs">Resposta via WhatsApp</p>
+        </div>
+      </div>
+
+      <div class="bg-[#111] border border-white/10 rounded-2xl p-5 flex items-center gap-4">
+        <div class="w-12 h-12 bg-[#F0B429]/10 rounded-xl flex items-center justify-center text-2xl shrink-0">💳</div>
+        <div>
+          <p class="text-white font-bold text-sm">Pagamento Seguro</p>
+          <p class="text-white/40 text-xs">Pix, cartão e dinheiro</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer class="bg-[#0a0a0a] border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 py-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-10 h-10 rounded-full border-2 border-[#F0B429] bg-[#111] flex items-center justify-center">
+            <span class="font-display text-[#F0B429] text-lg">DNZ</span>
+          </div>
+          <div>
+            <div class="font-display text-white text-xl">DNZ</div>
+            <div class="text-[#F0B429] text-[10px] font-bold tracking-[0.25em]">OUTLET</div>
+          </div>
+        </div>
+        <p class="text-white/40 text-sm leading-relaxed mb-4">Vivências &amp; Vendas. Moda streetwear com qualidade, procedência e preço baixo.</p>
+        <div class="flex gap-3">
+          <a href="https://www.instagram.com/dnzoutlet.boituva" target="_blank"
+             class="w-9 h-9 bg-[#111] border border-white/10 rounded-lg flex items-center justify-center hover:border-[#F0B429] hover:bg-[#F0B429]/10 transition-colors">
+            <svg class="w-4 h-4 text-white/60" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="https://wa.me/5515999999999" target="_blank"
+             class="w-9 h-9 bg-[#111] border border-white/10 rounded-lg flex items-center justify-center hover:border-[#25D366] hover:bg-[#25D366]/10 transition-colors">
+            <svg class="w-4 h-4 text-white/60" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-widest">Catálogo</h4>
+        <ul class="space-y-2 text-sm text-white/40">
+          <li><a href="#" class="hover:text-[#F0B429] transition-colors">Camisetas</a></li>
+          <li><a href="#" class="hover:text-[#F0B429] transition-colors">Calças</a></li>
+          <li><a href="#" class="hover:text-[#F0B429] transition-colors">Jaquetas &amp; Moletons</a></li>
+          <li><a href="#" class="hover:text-[#F0B429] transition-colors">Tênis &amp; Calçados</a></li>
+          <li><a href="#" class="hover:text-[#F0B429] transition-colors">Bonés</a></li>
+          <li><a href="#" class="hover:text-[#F0B429] transition-colors">Perfumes</a></li>
+        </ul>
+      </div>
+
+      <!-- Info -->
+      <div>
+        <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-widest">Informações</h4>
+        <ul class="space-y-2 text-sm text-white/40">
+          <li><a href="#" class="hover:text-[#F0B429] transition-colors">Sobre a DNZ</a></li>
+          <li><a href="#" class="hover:text-[#F0B429] transition-colors">Política de Trocas</a></li>
+          <li><a href="#" class="hover:text-[#F0B429] transition-colors">Prazo de Entrega</a></li>
+          <li><a href="#" class="hover:text-[#F0B429] transition-colors">Formas de Pagamento</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-widest">Contato</h4>
+        <ul class="space-y-3 text-sm text-white/40">
+          <li class="flex items-start gap-2">
+            <span class="mt-0.5">📍</span>
+            <span>Rua São Roque, 68 – Centro<br/>Boituva – SP</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span>📱</span>
+            <a href="https://wa.me/5515999999999" target="_blank" class="hover:text-[#25D366] transition-colors">(15) 99999-9999</a>
+          </li>
+          <li class="flex items-center gap-2">
+            <span>📸</span>
+            <a href="https://www.instagram.com/dnzoutlet.boituva" target="_blank" class="hover:text-[#F0B429] transition-colors">@dnzoutlet.boituva</a>
+          </li>
+          <li class="flex items-center gap-2">
+            <span>🕐</span>
+            <span>Seg–Sáb: 9h–19h</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="border-t border-white/10 py-5">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-white/20 text-xs">
+        <span>© 2025 DNZ Outlet Boituva. Todos os direitos reservados.</span>
+        <span>🇧🇷 Feito com orgulho em Boituva/SP</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════
+       WHATSAPP FLOAT BUTTON
+  ══════════════════════════════════════ -->
+  <a href="https://wa.me/5515999999999?text=Olá!%20Vim%20pelo%20site%20da%20DNZ%20Outlet%20e%20quero%20ver%20os%20produtos!"
+     target="_blank"
+     class="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#1ebe5d] text-black w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all"
+     title="Falar no WhatsApp">
+    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <!-- Ping -->
+    <span class="absolute top-0 right-0 w-3 h-3 bg-white rounded-full animate-ping"></span>
+  </a>
+
+  <!-- Scroll to top -->
+  <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+          class="fixed bottom-24 right-6 z-40 bg-[#111] border border-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center opacity-0 translate-y-4 hover:border-[#F0B429] hover:text-[#F0B429] transition-all">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+  </button>
+
+  <!-- ══════════════════════════════════════
+       CART DRAWER
+  ══════════════════════════════════════ -->
+  <div id="cart-overlay" class="fixed inset-0 bg-black/70 z-50 opacity-0 pointer-events-none" onclick="toggleCart()"></div>
+  <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-sm bg-[#111] border-l border-white/10 z-50 flex flex-col">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-white/10">
+      <h2 class="font-display text-xl text-white">CARRINHO</h2>
+      <button onclick="toggleCart()" class="text-white/50 hover:text-white p-1">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Items -->
+    <div id="cart-items" class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+      <!-- Empty state -->
+      <div id="cart-empty" class="flex flex-col items-center justify-center h-full gap-4 text-center">
+        <div class="text-5xl">🛒</div>
+        <p class="text-white/50 text-sm">Seu carrinho está vazio</p>
+        <button onclick="toggleCart()" class="text-[#F0B429] text-sm font-semibold hover:underline">Continuar comprando</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="px-5 py-5 border-t border-white/10 space-y-3">
+      <div class="flex items-center justify-between text-sm">
+        <span class="text-white/50">Subtotal</span>
+        <span id="cart-total" class="text-[#F0B429] font-display text-xl">R$ 0,00</span>
+      </div>
+      <a id="whatsapp-checkout" href="#" target="_blank"
+         class="block w-full bg-[#25D366] hover:bg-[#1ebe5d] text-black font-bold py-3.5 rounded-full text-sm text-center transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Finalizar via WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TOAST
+  ══════════════════════════════════════ -->
+  <div id="toast" class="fixed top-20 right-4 z-50 bg-[#1a1a1a] border border-[#F0B429]/30 text-white text-sm px-4 py-3 rounded-xl shadow-xl translate-x-[calc(100%+2rem)] transition-all duration-300 flex items-center gap-2 max-w-xs">
+    <span class="text-[#F0B429]">✓</span>
+    <span id="toast-msg">Produto adicionado!</span>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════════════ -->
+  <script>
+    // ── Cart state ────────────────────────────────────
+    const cart = [];
+    let cartOpen = false;
+
+    function formatBRL(value) {
+      return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function addToCart(name, price) {
+      const existing = cart.find(i => i.name === name);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ name, price, qty: 1 });
+      }
+      renderCart();
+      showToast(`"${name}" adicionado ao carrinho!`);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    function changeQty(index, delta) {
+      cart[index].qty = Math.max(1, cart[index].qty + delta);
+      renderCart();
+    }
+
+    function renderCart() {
+      const badge = document.getElementById('cart-badge');
+      const itemsEl = document.getElementById('cart-items');
+      const emptyEl = document.getElementById('cart-empty');
+      const totalEl = document.getElementById('cart-total');
+      const waLink  = document.getElementById('whatsapp-checkout');
+
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+
+      badge.textContent = count;
+
+      if (cart.length === 0) {
+        emptyEl.style.display = 'flex';
+        // remove dynamic items
+        itemsEl.querySelectorAll('.cart-item').forEach(el => el.remove());
+        totalEl.textContent = 'R$ 0,00';
+        waLink.href = '#';
+        return;
+      }
+
+      emptyEl.style.display = 'none';
+      itemsEl.querySelectorAll('.cart-item').forEach(el => el.remove());
+
+      cart.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'cart-item flex items-center gap-3 bg-white/5 rounded-xl p-3';
+        div.innerHTML = `
+          <div class="w-14 h-14 bg-[#1a1a1a] rounded-lg overflow-hidden shrink-0">
+            <img src="https://picsum.photos/seed/cart${i}/100/100" class="w-full h-full object-cover" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-white text-xs font-semibold leading-tight truncate">${item.name}</p>
+            <p class="text-[#F0B429] text-sm font-bold mt-0.5">${formatBRL(item.price)}</p>
+            <div class="flex items-center gap-2 mt-1">
+              <button onclick="changeQty(${i},-1)" class="w-6 h-6 bg-white/10 hover:bg-white/20 rounded text-white text-xs font-bold">−</button>
+              <span class="text-white text-xs w-4 text-center">${item.qty}</span>
+              <button onclick="changeQty(${i},1)" class="w-6 h-6 bg-white/10 hover:bg-white/20 rounded text-white text-xs font-bold">+</button>
+            </div>
+          </div>
+          <button onclick="removeFromCart(${i})" class="text-white/30 hover:text-red-400 transition-colors p-1 shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        `;
+        itemsEl.insertBefore(div, emptyEl);
+      });
+
+      totalEl.textContent = formatBRL(total);
+
+      // Build WhatsApp message
+      const msg = '🛒 *Pedido DNZ Outlet*\n\n' +
+        cart.map(i => `• ${i.name} x${i.qty} — ${formatBRL(i.price * i.qty)}`).join('\n') +
+        `\n\n*Total: ${formatBRL(total)}*`;
+      waLink.href = `https://wa.me/5515999999999?text=${encodeURIComponent(msg)}`;
+    }
+
+    function toggleCart() {
+      cartOpen = !cartOpen;
+      const drawer  = document.getElementById('cart-drawer');
+      const overlay = document.getElementById('cart-overlay');
+      if (cartOpen) {
+        drawer.classList.add('open');
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        overlay.classList.add('opacity-100');
+        document.body.style.overflow = 'hidden';
+      } else {
+        drawer.classList.remove('open');
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        overlay.classList.remove('opacity-100');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // ── Toast ─────────────────────────────────────────
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      toast.style.transform = 'translateX(0)';
+      setTimeout(() => { toast.style.transform = 'translateX(calc(100% + 2rem))'; }, 3000);
+    }
+
+    // ── Mobile menu ───────────────────────────────────
+    function toggleMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    // ── Countdown timer ───────────────────────────────
+    function startCountdown() {
+      const target = new Date();
+      target.setHours(target.getHours() + 8, target.getMinutes() + 34, 0, 0);
+
+      setInterval(() => {
+        const now  = new Date();
+        const diff = Math.max(0, target - now);
+        const h = String(Math.floor(diff / 3600000)).padStart(2,'0');
+        const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
+        const s = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
+        document.getElementById('cd-h').textContent = h;
+        document.getElementById('cd-m').textContent = m;
+        document.getElementById('cd-s').textContent = s;
+      }, 1000);
+    }
+    startCountdown();
+
+    // ── Scroll effects ────────────────────────────────
+    window.addEventListener('scroll', () => {
+      const scrollBtn = document.getElementById('scroll-top');
+      if (window.scrollY > 400) {
+        scrollBtn.style.opacity = '1';
+        scrollBtn.style.transform = 'translateY(0)';
+      } else {
+        scrollBtn.style.opacity = '0';
+        scrollBtn.style.transform = 'translateY(1rem)';
+      }
+    });
+
+    // ── Smooth scroll for anchor links ────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href').slice(1);
+        if (!id) return;
+        const el = document.getElementById(id);
+        if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+  </script>
+
+</body>
+</html>
