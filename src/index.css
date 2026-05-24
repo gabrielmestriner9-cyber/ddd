@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-[#0A0A0A] text-white;
     font-family: 'Inter', system-ui, sans-serif;
     margin: 0;
   }
@@ -13,40 +17,173 @@
     width: 100%;
     min-height: 100vh;
   }
+
+  /* Custom selection color */
+  ::selection {
+    background-color: rgba(240, 180, 41, 0.3);
+    color: #ffffff;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0A0A0A;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #F0B429;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #d4992a;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Gold glow utility */
+  .glow-gold {
+    box-shadow: 0 0 20px rgba(240, 180, 41, 0.4), 0 0 40px rgba(240, 180, 41, 0.15);
+  }
+
+  .glow-gold-sm {
+    box-shadow: 0 0 10px rgba(240, 180, 41, 0.3);
+  }
 }
 
 @layer components {
-  .btn-primary {
-    @apply bg-primary-700 hover:bg-primary-800 text-white font-medium px-4 py-2 rounded-lg transition-colors;
+  /* Shimmer loading effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(240, 180, 41, 0.08) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
   }
-  .btn-accent {
-    @apply bg-accent-500 hover:bg-accent-600 text-white font-medium px-4 py-2 rounded-lg transition-colors;
+}
+
+/* ── Keyframes ── */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
   }
-  .btn-ghost {
-    @apply bg-transparent hover:bg-gray-100 text-gray-700 font-medium px-4 py-2 rounded-lg transition-colors;
+  100% {
+    background-position: 200% 0;
   }
-  .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-4;
+}
+
+/* AI scanner scan-line effect */
+@keyframes scan {
+  0% {
+    top: 0%;
+    opacity: 1;
   }
-  .input {
-    @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  45% {
+    opacity: 1;
   }
-  .label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
+  50% {
+    top: 100%;
+    opacity: 0;
   }
-  .badge-active {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700;
+  51% {
+    top: 0%;
+    opacity: 0;
   }
-  .badge-inactive {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600;
+  55% {
+    opacity: 1;
   }
-  .badge-pending {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700;
+  100% {
+    top: 100%;
+    opacity: 1;
   }
-  .badge-cancelled {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-600;
+}
+
+.scan-animation {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  animation: scan 2.5s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #F0B429 30%,
+    #ffffff 50%,
+    #F0B429 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 12px rgba(240, 180, 41, 0.8), 0 0 24px rgba(240, 180, 41, 0.4);
+}
+
+/* Marquee scroll animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
   }
-  .badge-completed {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700;
+  100% {
+    transform: translateX(-33.333%);
   }
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+/* Pop-in for size result */
+@keyframes popIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Slide up animation */
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.35s ease-out forwards;
 }

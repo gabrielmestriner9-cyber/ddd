@@ -1,4 +1,4 @@
-import { Product } from '../types';
+import type { Product } from '../types';
 
 export const products: Product[] = [
   {
@@ -304,3 +304,9 @@ export const products: Product[] = [
 ];
 
 export default products;
+
+export function getRelatedProducts(product: Product, limit = 3): Product[] {
+  return products
+    .filter((p) => p.category === product.category && p.id !== product.id)
+    .slice(0, limit);
+}
