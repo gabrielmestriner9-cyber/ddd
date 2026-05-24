@@ -7,35 +7,44 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: '#f0f7ff',
-          100: '#dbeefe',
-          200: '#bfe0fd',
-          300: '#93ccfb',
-          400: '#5eaef7',
-          500: '#3b91f2',
-          600: '#1e6fc6',
-          700: '#1a5aa0',
-          800: '#1a4c84',
-          900: '#1a3f6d',
-          DEFAULT: '#1a5aa0',
-        },
-        accent: {
-          50: '#f6fce8',
-          100: '#ecf9d1',
-          200: '#d6f1a5',
-          300: '#b7e46d',
-          400: '#96d43c',
-          500: '#78bc1f',
-          600: '#5c9714',
-          700: '#467512',
-          800: '#3a5e14',
-          900: '#314f15',
-          DEFAULT: '#78bc1f',
+        brand: {
+          pink: '#D4006D',
+          'pink-light': '#FF4DA6',
+          'pink-pale': '#FFF0F7',
+          gold: '#C9992B',
+          'gold-light': '#F0C040',
+          dark: '#0D0D1A',
+          'dark-2': '#1A1A2E',
+          'dark-3': '#252540',
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
+      },
+      animation: {
+        'pulse-pink': 'pulse-pink 2s cubic-bezier(0.4,0,0.6,1) infinite',
+        'shimmer': 'shimmer 2s linear infinite',
+        'slide-up': 'slide-up 0.3s ease-out',
+        'fade-in': 'fade-in 0.4s ease-out',
+      },
+      keyframes: {
+        'pulse-pink': {
+          '0%,100%': { opacity: 1 },
+          '50%': { opacity: 0.5, boxShadow: '0 0 20px #D4006D' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+        'slide-up': {
+          '0%': { transform: 'translateY(20px)', opacity: 0 },
+          '100%': { transform: 'translateY(0)', opacity: 1 },
+        },
+        'fade-in': {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
       },
     },
   },
