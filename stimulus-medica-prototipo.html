@@ -640,6 +640,24 @@ textarea,input[type=text],select{
 .vq .vopt.sel{border-color:var(--brand)}
 .vq .vopt.certo{border-color:var(--brand);color:var(--brand)}
 .vq .vopt.errado{border-color:var(--crit);color:var(--crit)}
+/* ===== padrões de performance ===== */
+.padato{border-top:1px solid var(--line);padding:12px 0}
+.padato:first-of-type{border-top:0;padding-top:0}
+.padh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:8px;font-size:13.5px}
+.padniv{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:7px}
+.padn{
+  text-align:left;border:1px solid var(--line);border-radius:9px;padding:8px 10px;
+  font-size:12.2px;line-height:1.42;color:var(--ink-2);background:var(--surface);cursor:pointer;
+  transition:border-color .15s,background .15s;
+}
+.padn:hover{border-color:var(--line-2)}
+.padn .lb{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.09em;
+  text-transform:uppercase;margin-bottom:4px;color:var(--muted);font-weight:600}
+.padn.m1.on{border-color:var(--crit);background:var(--crit-soft);color:var(--crit)}
+.padn.m1.on .lb{color:var(--crit)}
+.padn.z.on{border-color:var(--line-2);background:var(--surface-3);color:var(--ink)}
+.padn.p1.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand)}
+.padn.p1.on .lb{color:var(--brand)}
 </style>
 
 <div class="app">
@@ -970,7 +988,10 @@ const NAV = [
   {id:"contatos",     t:"Mapa de contatos",     ic:'<path d="M21 11.5a8.4 8.4 0 01-9 8.4L3 21l1.1-4.6A8.4 8.4 0 1121 11.5z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/>'},
   {id:"mapadia",      t:"Mapa do dia",          ic:'<rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 13h3M8 16.5h8M13 13h3"/>'},
   {id:"classificacao",t:"Classificação",        ic:'<path d="M4 5h16M4 10h10M4 15h13M4 20h7"/><path d="M17.5 9.5l2 2 3.5-4" />'},
-  {id:"academia",     t:"Academia da equipe",   ic:'<path d="M12 4l9 4.5-9 4.5-9-4.5z"/><path d="M6.5 11v5c0 1.4 2.5 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-5"/>'}
+  {id:"academia",     t:"Academia da equipe",   ic:'<path d="M12 4l9 4.5-9 4.5-9-4.5z"/><path d="M6.5 11v5c0 1.4 2.5 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-5"/>'},
+  /* --- padrões de performance: os seis guias --- */
+  {id:"padroes",      t:"Padrões de atendimento", ic:'<path d="M5 3.5h11l3 3v14H5z"/><path d="M8.5 11l2 2 4.5-4.5M8.5 16h7"/>'},
+  {id:"experiencia",  t:"Painel de experiência",  ic:'<path d="M4 19V5"/><path d="M8 19v-6M12 19V9M16 19v-4M20 19V7"/><path d="M4 19h17"/>'}
 ];
 const TITULOS = {
   painel:["Painel do dia","Quinta, 4 de setembro de 2026 · Unidade UNI"],
@@ -988,7 +1009,9 @@ const TITULOS = {
   contatos:["Mapa de Contatos do Dia","Gestão de Leads · GNC01 · linha de frente · Unidade UNI"],
   mapadia:["Mapa de Atendimentos do Dia","Rotina da véspera · 08:00 às 19:30, de 30 em 30 minutos · Unidade UNI"],
   classificacao:["Classificação de Serviços do Tratamento","Diagnóstico, negociação, programação clínica e agendamento"],
-  academia:["Academia da equipe","Clínica 5.0! · macroprocessos, rotinas por linha e certificação"]
+  academia:["Academia da equipe","Clínica 5.0! · macroprocessos, rotinas por linha e certificação"],
+  padroes:["Padrões de atendimento","Seis guias · 60 atos de responsabilidade · três níveis cada"],
+  experiencia:["Painel de experiência","O que os padrões passam a medir · competência 09/2026 · Unidade UNI"]
 };
 
 /* ---- o dia como um voo: uma só unidade de conta, o assento ---- */
@@ -3159,6 +3182,345 @@ Object.assign(ACTS, {
   "v-quiz-reset"(){ S.villi.quiz={}; render(); }
 });
 
+/* ==================================================================
+   PADRÕES DE PERFORMANCE — os seis guias dentro do sistema
+   Organização por ato de responsabilidade, três níveis por ato,
+   nível do ponto de contato = mínimo dos atos aplicáveis.
+   Papéis: R1 executor clínico · R2 transferência · R3 compromisso
+           R4 documentação · R5 anfitrião · R6 consistência
+           R7 governança clínica
+   ================================================================== */
+
+const PAPEL = {
+  R1:"Executor clínico", R2:"Transferência", R3:"Compromisso",
+  R4:"Documentação", R5:"Anfitrião", R6:"Consistência", R7:"Governança clínica"
+};
+
+const PAD = [
+ {id:"checkin", cod:"GNC03 / RCA06", nome:"Check-in", sub:"chegada e transição para a cadeira", tempo:"até 5 min",
+  mom:[
+   {t:"Na recepção", atos:[
+    {c:"C1", n:"Reconhecer a chegada", p:"R5", m1:"Espera parado para ser notado", z:"Cumprimento nominal em até 30 segundos", p1:"Guia e ficha já à mão quando ele chega"},
+    {c:"C2", n:"Confirmar o que mudou", p:"R4", m1:"Nada conferido, ou tudo perguntado de novo", z:"Contato, cobertura, saúde e medicação", p1:"Checagem dirigida ao procedimento de hoje"},
+    {c:"C3", n:"Resolver a papelada antes", p:"R4", m1:"Termo assinado às pressas na cadeira", z:"Termo, guia e pagamento resolvidos antes de entrar", p1:"Valor e cobertura informados sem ele perguntar"},
+    {c:"C4", n:"Informar a espera", p:"R5", m1:"Espera acima do limiar sem aviso", z:"Aviso espontâneo com número honesto e atualização", p1:"Oferece remarcar, sair e voltar, ou outro profissional"},
+    {c:"C5", n:"Acomodar quem espera", p:"R5", m1:"Ninguém volta a falar com ele até chamar", z:"Acomodação oferecida e contato retomado", p1:"Atenção ao caso: idoso, criança, dor, medo declarado"}
+   ]},
+   {t:"Transição para o atendimento", atos:[
+    {c:"C6", n:"Chamar e acompanhar", p:"R2", m1:"Chamado impessoal, vai sozinho à sala", z:"Chamado pelo nome e acompanhado; hora de início registrada", p1:"Retoma algo da visita anterior no caminho"},
+    {c:"C7", n:"Entregar com contexto", p:"R2", m1:"Profissional recebe sem saber de nada", z:"Informa o que foi conferido e o que o cliente relatou", p1:"Cliente não repete nada do que já disse"},
+    {c:"C8", n:"Confirmar o que será feito", p:"R1", m1:"Começa sem alinhar", z:"O que será feito, quanto tempo, confirmação da expectativa", p1:"Explica o que pode mudar durante o procedimento"},
+    {c:"C9", n:"Perguntar sobre a visita anterior", p:"R1", m1:"Não pergunta nada do intervalo", z:"Pergunta sobre dor, desconforto e dúvida desde a última", p1:"Retoma o que ficou registrado no check-out anterior"},
+    {c:"C10", n:"Preparar o ambiente", p:"R2", m1:"Preferências registradas ignoradas", z:"Ambiente pronto no padrão quando ele senta", p1:"Ajuste ao registro pessoal: pausa, medo, som, altura"}
+   ]}
+  ]},
+
+ {id:"proc", cod:"RCA07 / GNC04", nome:"Procedimento", sub:"condução e fechamento técnico", tempo:"o tempo planejado",
+  mom:[
+   {t:"Durante o ato clínico", atos:[
+    {c:"P1", n:"Combinar o sinal de pausa", p:"R1", m1:"Começa sem combinar como pedir para parar", z:"Sinal combinado antes de iniciar", p1:"Responde ao sinal na primeira vez em que é usado"},
+    {c:"P2", n:"Avisar antes das sensações fortes", p:"R1", m1:"Silêncio nos momentos que assustam", z:"Avisa antes de cada etapa de sensação forte", p1:"Descreve a sensação específica e a duração"},
+    {c:"P3", n:"Monitorar o conforto", p:"R1", m1:"Nenhuma checagem durante o ato", z:"Checagem em intervalos, com espaço para resposta", p1:"Ajusta a condução ao sinal e registra o ajuste"},
+    {c:"P4", n:"Comunicar o estouro de tempo", p:"R1", m1:"Estoura o tempo sem avisar ninguém", z:"Avisa a recepção e o cliente assim que percebe", p1:"Aviso a tempo de a recepção informar quem espera"},
+    {c:"P5", n:"Preservar a dignidade na sala", p:"R1+R2", m1:"Conversa paralela sobre outros na frente dele", z:"Foco, linguagem adequada, consentimento para imagem", p1:"Linguagem e ritmo adaptados ao estado emocional"}
+   ]},
+   {t:"Fechamento técnico", atos:[
+    {c:"P6", n:"Registrar o que foi executado", p:"R1", m1:"Registro deixado para depois e não feito", z:"Execução e hora de término no mesmo dia", p1:"Detalhe suficiente para outro assumir a próxima sessão"},
+    {c:"P7", n:"Registrar o desvio do plano", p:"R1", m1:"Desvio não registrado em lugar nenhum", z:"O que mudou e por quê, junto ao procedimento", p1:"Registra o efeito sobre os próximos serviços"},
+    {c:"P8", n:"Atualizar a programação", p:"R1", m1:"Programação segue como estava", z:"Formulário atualizado e coordenação avisada", p1:"Nova sequência pronta antes do check-out"},
+    {c:"P9", n:"Registrar o sinal do cliente", p:"R1+R2", m1:"Nada do que ele sentiu é registrado", z:"Dor, tolerância, pausas e preferências registradas", p1:"Registro acionável: o que fazer diferente na próxima"},
+    {c:"P10", n:"Passar o bastão ao check-out", p:"R2", m1:"Recepção não sabe o que foi feito", z:"Informa o que precisa ser dito e resolvido", p1:"A informação chega antes do cliente"}
+   ]}
+  ]},
+
+ {id:"checkout", cod:"GNC07 / RCA08", nome:"Check-out", sub:"encerramento clínico e administrativo", tempo:"até 6 min",
+  mom:[
+   {t:"Na cadeira", atos:[
+    {c:"A1", n:"Declarar o que foi feito", p:"R1", m1:"Sai sem saber, ou só com termo técnico", z:"O que foi feito e como ficou, na linguagem dele", p1:"Mostra o resultado comparado ao estado inicial"},
+    {c:"A2", n:"Orientar cuidados", p:"R1", m1:"Sem orientação em caso que exigia", z:"Orientação verbal clara para as próximas 48 h", p1:"Orientação escrita personalizada, entregue em mãos"},
+    {c:"A3", n:"Nomear o próximo serviço e o prazo", p:"R1", m1:"Não menciona o próximo passo", z:"Próximo serviço e prazo mínimo da programação", p1:"Explica o motivo clínico daquele prazo"},
+    {c:"A4", n:"Verificar compreensão", p:"R1", m1:"Não verifica nada", z:"Pergunta aberta de verificação e correção", p1:"Cliente repete sozinho o próximo passo e o prazo"},
+    {c:"A5", n:"Passar o bastão", p:"R2", m1:"Chega à recepção sem ninguém saber", z:"Informa o que precisa ser resolvido no balcão", p1:"A informação chega antes do cliente"}
+   ]},
+   {t:"Na recepção", atos:[
+    {c:"B1", n:"Agendar o próximo serviço", p:"R3", m1:"Sai sem data e sem combinação", z:"Data dentro do prazo, na agenda e no Formulário", p1:"Encaixe resolvido no horário que ele prefere"},
+    {c:"B2", n:"Fechar o financeiro", p:"R3", m1:"Surpresa de valor ou cobertura no balcão", z:"Pagamento e saldo informados sem surpresa", p1:"Próxima parcela combinada por escrito"},
+    {c:"B3", n:"Entregar os documentos", p:"R4", m1:"Falta documento obrigatório", z:"Todos entregues e conferidos na frente dele", p1:"Entrega também no canal digital que ele prefere"},
+    {c:"B4", n:"Registrar o encerramento", p:"R4", m1:"Atendimento sem fechamento na base", z:"Hora de saída, níveis e sinais no mesmo dia", p1:"Registra um fato pessoal para a próxima visita"},
+    {c:"B5", n:"Despedir e marcar o próximo contato", p:"R5", m1:"Sai sem despedida nominal", z:"Despedida pelo nome e próximo contato combinado", p1:"Acompanhamento agendado quando o caso pede"}
+   ]}
+  ]},
+
+ {id:"pos", cod:"RCA09", nome:"Pós-consulta", sub:"o contato que a clínica inicia", tempo:"dentro da janela",
+  mom:[
+   {t:"O disparo", atos:[
+    {c:"S1", n:"Aplicar a regra de gatilho", p:"R5", m1:"Caso elegível sem contato, ou fora da janela", z:"Todo caso previsto contatado dentro da janela", p1:"Janela antecipada para quem teve dor registrada"},
+    {c:"S2", n:"Contatar em nome de quem atendeu", p:"R5", m1:"Mensagem massificada e impessoal", z:"Identificado, citando o procedimento do dia", p1:"O próprio profissional assina ou fala"},
+    {c:"S3", n:"Perguntar o que foi previsto", p:"R5", m1:"Pergunta genérica de satisfação", z:"Pergunta dirigida ao sintoma esperado e à orientação", p1:"Verifica se a orientação escrita funcionou"},
+    {c:"S4", n:"Não vender nada", p:"R5", m1:"Emenda oferta, cobrança ou proposta", z:"Contato exclusivamente de cuidado", p1:"Resolve o que ele pediu sem virar porta de venda"},
+    {c:"S5", n:"Respeitar canal, horário e limite", p:"R5", m1:"Canal ou horário desrespeitados; insistência", z:"Preferência, horário e limite de tentativas respeitados", p1:"Registra a preferência para os próximos contatos"}
+   ]},
+   {t:"O que volta", atos:[
+    {c:"S6", n:"Classificar a resposta", p:"R5", m1:"Resposta lida e não classificada", z:"Sem intercorrência · desconforto · problema · sem resposta", p1:"Classificação com a fala literal do cliente"},
+    {c:"S7", n:"Encaminhar o problema", p:"R3+R1", m1:"Problema relatado sem dono nem prazo", z:"Escalado no mesmo dia, com dono e prazo", p1:"Horário já reservado quando ele é retornado"},
+    {c:"S8", n:"Fechar o ciclo com o cliente", p:"R5", m1:"Nunca fica sabendo o que aconteceu", z:"Retorno informando o que foi feito ou decidido", p1:"Retorno dado por quem resolveu, com o porquê"},
+    {c:"S9", n:"Registrar o sinal na base", p:"R4", m1:"Contato não deixa rastro", z:"Envio, resposta, classificação e desfecho registrados", p1:"Registro acionável para o próximo check-in"},
+    {c:"S10", n:"Devolver o aprendizado", p:"R6+R7", m1:"Queixas se repetem e ninguém consolida", z:"Consolidação por procedimento, levada à governança", p1:"Mudança implementada e queixa cai na medição seguinte"}
+   ]}
+  ]},
+
+ {id:"retorno", cod:"RET01 / RET02", nome:"Retorno e resgate", sub:"antes e depois da queda", tempo:"varredura semanal e mensal",
+  mom:[
+   {t:"Frente A · alerta de retorno", atos:[
+    {c:"A1", n:"Definir a janela ao fim do tratamento", p:"R7", m1:"Tratamento concluído sem janela definida", z:"Janela em dias registrada conforme serviço e condição", p1:"Janela explicada ao cliente com o motivo clínico"},
+    {c:"A2", n:"Varrer a base e montar a fila", p:"R6+R4", m1:"Varredura quando alguém lembra", z:"Varredura semanal em dia fixo, fila distribuída", p1:"Fila priorizada por risco e valor"},
+    {c:"A3", n:"Contatar antes do vencimento", p:"R5", m1:"Contato depois de vencer, ou nenhum", z:"Contato dentro da janela, com o motivo clínico", p1:"Menção específica ao caso dele"},
+    {c:"A4", n:"Resolver o agendamento no ato", p:"R3", m1:"Avisa e deixa o cliente marcar depois", z:"Opções concretas e agendamento na mesma conversa", p1:"Oferece o horário que o histórico mostra"},
+    {c:"A5", n:"Registrar o motivo de não agendar", p:"R4", m1:"Não agenda e o motivo não é registrado", z:"Motivo em categoria padronizada e próximo contato", p1:"Motivo nas palavras dele, encaminhado a quem resolve"}
+   ]},
+   {t:"Frente B · resgate de inativo", atos:[
+    {c:"B1", n:"Aplicar o critério de inatividade", p:"R6", m1:"Fila montada por impressão", z:"Critério escrito aplicado de forma consistente", p1:"Critério distinto para quem tem tratamento pendente"},
+    {c:"B2", n:"Segmentar por motivo e valor", p:"R6+R4", m1:"Disparo único e idêntico para todos", z:"Segmentação por motivo, tempo e valor do vínculo", p1:"Mensagem e canal próprios de cada segmento"},
+    {c:"B3", n:"Abordar reconhecendo a história", p:"R5", m1:"Mensagem de captação, como a um desconhecido", z:"Reconhece o histórico e o que ficou pendente", p1:"Em nome de quem o atendia, retomando o caso"},
+    {c:"B4", n:"Remover o obstáculo específico", p:"R5+R3", m1:"Oferta genérica que ignora o motivo", z:"Resposta dirigida ao obstáculo declarado", p1:"Obstáculo resolvido antes do contato"},
+    {c:"B5", n:"Encerrar com dignidade", p:"R5", m1:"Insiste além do limite ou ignora recusa", z:"Limite respeitado, recusa registrada, porta aberta", p1:"Deixa um caminho concreto de volta"}
+   ]}
+  ]},
+
+ {id:"pps", cod:"RCA10 / RET03", nome:"PPS/PMS", sub:"a porta do vínculo", tempo:"na conclusão do tratamento",
+  mom:[
+   {t:"Apresentação", atos:[
+    {c:"M1", n:"Mostrar o resultado alcançado", p:"R1", m1:"Encerra sem comparar com o ponto de partida", z:"Resultado mostrado ao lado do estado inicial", p1:"Retoma a queixa original nas palavras dele"},
+    {c:"M2", n:"Apresentar o risco individual", p:"R1", m1:"Programa idêntico para todos", z:"Risco do prontuário e o intervalo que ele justifica", p1:"Mostra o que acontece sem manutenção, com prazo"},
+    {c:"M3", n:"Explicar o programa em termos concretos", p:"R3", m1:"Explicação vaga, sem escopo nem prazo", z:"O que inclui, quantas visitas, o que não inclui", p1:"Entrega por escrito com o calendário do 1º ciclo"},
+    {c:"M4", n:"Apresentar o custo comparado", p:"R3", m1:"Só o preço, ou comparação inflada", z:"Manutenção ao lado do custo provável de retratar", p1:"Apresenta o cenário de risco baixo com honestidade"},
+    {c:"M5", n:"Não fechar na hesitação", p:"R3", m1:"Insiste ou condiciona vantagem a decidir na hora", z:"Proposta por escrito e data para retomar", p1:"Oferece experimentar o primeiro ciclo antes"}
+   ]},
+   {t:"Negociação e fechamento", atos:[
+    {c:"M6", n:"Registrar a decisão e o motivo", p:"R4", m1:"Decisão sem registro, ou sem o motivo do não", z:"Decisão e motivo padronizados, com data de retomada", p1:"Motivo nas palavras do cliente, encaminhado"},
+    {c:"M7", n:"Formalizar com clareza", p:"R3", m1:"Contrato genérico, cancelamento obscuro", z:"Escopo, prazo, valor, renovação e cancelamento", p1:"Cliente explica com as próprias palavras o que contratou"},
+    {c:"M8", n:"Agendar os primeiros procedimentos", p:"R3", m1:"Contrato assinado sem nenhuma visita marcada", z:"Primeiras visitas na agenda e no contrato", p1:"Ciclo inteiro agendado nos horários que funcionam"},
+    {c:"M9", n:"Agradecer formalmente", p:"R5", m1:"Fecha sem nenhum reconhecimento", z:"Agradecimento formal no canal de preferência", p1:"Agradecimento pessoal de quem conduziu o tratamento"},
+    {c:"M10", n:"Registrar a mudança de estado", p:"R4", m1:"Entra em programa e nada muda na base", z:"Estado, ciclo e data de revisão atualizados", p1:"Revisão do programa já agendada com o critério"}
+   ]}
+  ]}
+];
+
+/* dados fictícios do mês, para o painel de experiência */
+const EXP = {
+  equipe:[
+    {nome:"Dra. Karine", reg:118, comp:96, dens:2.4, sig:0.21, atraso:4},
+    {nome:"Dr. Villi",   reg:104, comp:91, dens:1.8, sig:0.34, atraso:9},
+    {nome:"Dra. Helena", reg:87,  comp:78, dens:1.1, sig:0.62, atraso:14},
+    {nome:"Dr. Marcelo", reg:66,  comp:88, dens:1.5, sig:0.29, atraso:7}
+  ],
+  estados:[
+    {k:"L", nome:"Lead",       n:0,   cor:"var(--muted)"},
+    {k:"1", nome:"Gerado",     n:58,  cor:"var(--brand)"},
+    {k:"2", nome:"Adoçado",    n:65,  cor:"var(--brand)"},
+    {k:"3", nome:"Alicerçado", n:116, cor:"var(--brand)"},
+    {k:"4", nome:"Vinculado",  n:47,  cor:"var(--brand-2)"},
+    {k:"I", nome:"Inativo",    n:194, cor:"var(--crit)"}
+  ],
+  sinais:[
+    ["Espera não informada", "6,2%", "das esperas acima de 10 min", "warn"],
+    ["Ciclos de pós-consulta fechados", "71%", "dos relatos com problema", "warn"],
+    ["Motivo do não registrado", "44%", "das recusas de agendamento", "crit"],
+    ["Programa com indicação clínica", "100%", "das adesões do mês", "ok"]
+  ]
+};
+
+S.pad = { guia:"checkin", reg:{} };
+
+function padNivel(g){
+  const R = S.pad.reg;
+  let min = null, mais = 0, resp = 0, tot = 0;
+  g.mom.forEach(m => m.atos.forEach(a => {
+    tot++;
+    const v = R[g.id+"-"+a.c];
+    if(v === undefined) return;
+    resp++;
+    if(v === 1) mais++;
+    min = (min === null) ? v : Math.min(min, v);
+  }));
+  return {min, mais, resp, tot};
+}
+
+/* ================= TELA — biblioteca de padrões ================== */
+function telaPadroes(){
+  const g = PAD.find(x => x.id === S.pad.guia) || PAD[0];
+  const N = padNivel(g);
+  const rotulo = N.resp === 0 ? "—" : N.min === -1 ? "abaixo do padrão" : N.min === 0 ? "no padrão" : "acima do padrão";
+  const chipCls = N.resp === 0 ? "" : N.min === -1 ? "crit" : N.min === 0 ? "" : "ok";
+
+  const seletor = PAD.map(x => {
+    const n = padNivel(x);
+    return `<button class="btn sm ${x.id===g.id?"primary":""}" data-act="pad-guia" data-arg="${x.id}">
+      ${esc(x.nome)}${n.resp?` · ${n.resp}/${n.tot}`:""}</button>`;
+  }).join("");
+
+  const blocos = g.mom.map(m => `
+    <div class="card-b" style="border-top:1px solid var(--line)">
+      <div class="eyebrow" style="margin-bottom:9px">${esc(m.t)}</div>
+      ${m.atos.map(a => {
+        const v = S.pad.reg[g.id+"-"+a.c];
+        const op = (val,cls,lb,txt) => `<button class="padn ${cls} ${v===val?"on":""}"
+            data-act="pad-nivel" data-arg="${g.id}|${a.c}|${val}">
+            <span class="lb">${lb}</span>${esc(txt)}</button>`;
+        return `<div class="padato">
+          <div class="padh">
+            <span class="mono" style="color:var(--brand);font-weight:600">${a.c}</span>
+            <b>${esc(a.n)}</b>
+            <span class="chip">${a.p.split("+").map(x=>PAPEL[x]||x).join(" + ")}</span>
+          </div>
+          <div class="padniv">
+            ${op(-1,"m1","−1 abaixo",a.m1)}
+            ${op(0,"z","0 padrão",a.z)}
+            ${op(1,"p1","+1 acima",a.p1)}
+          </div>
+        </div>`;
+      }).join("")}
+    </div>`).join("");
+
+  return `
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card kpi"><span class="eyebrow">Guia selecionado</span><div class="v" style="font-size:20px">${esc(g.nome)}</div><div class="foot">${esc(g.cod)} · ${esc(g.tempo)}</div></div>
+    <div class="card kpi ${N.min===-1?"alarm":""}"><span class="eyebrow">Nível do atendimento</span><div class="v" style="font-size:20px">${rotulo}</div><div class="foot">mínimo dos atos, nunca a média</div></div>
+    <div class="card kpi"><span class="eyebrow">Atos acima do padrão</span><div class="v">${N.mais}</div><div class="foot">contador separado · não compensa um −1</div></div>
+    <div class="card kpi"><span class="eyebrow">Atos registrados</span><div class="v">${N.resp}<small>/${N.tot}</small></div><div class="foot">${N.resp<N.tot?"registro incompleto":"visita registrada"}</div></div>
+  </div>
+
+  <section class="card" style="margin-bottom:16px">
+    <div class="card-h"><h2>Pontos de contato com padrão escrito</h2><span class="spacer"></span><span class="eyebrow">rascunho · não validado com a equipe</span></div>
+    <div class="card-b" style="display:flex;gap:7px;flex-wrap:wrap">${seletor}
+      <span class="spacer"></span>
+      <button class="btn sm" data-act="pad-limpar">Limpar registro</button>
+    </div>
+  </section>
+
+  <div class="split">
+    <section class="card">
+      <div class="card-h"><h2>${esc(g.nome)} · ${esc(g.cod)}</h2><span class="spacer"></span><span class="eyebrow">${esc(g.sub)}</span></div>
+      ${blocos}
+    </section>
+
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <section class="card">
+        <div class="card-h"><h2>Como este padrão funciona</h2></div>
+        <div class="card-b" style="font-size:12.6px;color:var(--ink-2);display:flex;flex-direction:column;gap:9px">
+          <p><b>Por ato, não por cargo.</b> Cada ato tem exatamente um responsável por turno. Uma pessoa acumula vários papéis; nenhum ato fica sem dono.</p>
+          <p><b>Três níveis.</b> O 0 é o que todo cliente recebe sempre. O +1 é o que gera vínculo — e só vale se for observável e registrável sem perguntar nada ao cliente.</p>
+          <p><b>O nível é o mínimo.</b> Um ato em −1 derruba o ponto de contato inteiro. Média esconde a falha, e é a falha que o cliente leva embora.</p>
+          <p><b>Ninguém é avaliado pelo que não controla.</b> Atraso, tempo de procedimento, adesão ao programa e taxa de retorno são dados de processo — o que pontua é informar, registrar e encaminhar.</p>
+          <p class="demo-tag">seis guias · 60 atos · sete papéis</p>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h2>Papéis</h2></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:6px;font-size:12.6px">
+          ${Object.keys(PAPEL).map(k=>`<div><span class="mono" style="color:var(--brand);font-weight:600">${k}</span> · ${esc(PAPEL[k])}</div>`).join("")}
+        </div>
+      </section>
+    </div>
+  </div>`;
+}
+
+/* ================= TELA — painel de experiência =================== */
+function telaExperiencia(){
+  const E = EXP;
+  const totalEstados = E.estados.reduce((t,x)=>t+x.n,0);
+  const vinc = E.estados.find(x=>x.k==="4").n;
+  const ativos = E.estados.filter(x=>["1","2","3","4"].includes(x.k)).reduce((t,x)=>t+x.n,0);
+  const regTot = E.equipe.reduce((t,x)=>t+x.reg,0);
+  const compMedia = Math.round(E.equipe.reduce((t,x)=>t+x.comp*x.reg,0)/regTot);
+  const densMedia = (E.equipe.reduce((t,x)=>t+x.dens*x.reg,0)/regTot).toFixed(1);
+  const sigMax = Math.max(...E.equipe.map(x=>x.sig));
+
+  return `
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card kpi"><span class="eyebrow">Check-outs completos</span><div class="v">${compMedia}<small>%</small></div><div class="foot">todos os atos aplicáveis em 0 ou mais</div></div>
+    <div class="card kpi"><span class="eyebrow">Densidade de +1</span><div class="v">${densMedia}</div><div class="foot">atos acima do padrão por visita</div></div>
+    <div class="card kpi ${sigMax>0.5?"alarm":""}"><span class="eyebrow">Maior dispersão entre executores</span><div class="v">${sigMax.toFixed(2).replace(".",",")}</div><div class="foot">σ do nível · meta é cair, não a média subir</div></div>
+    <div class="card kpi"><span class="eyebrow">Base vinculada · π(4)</span><div class="v">${(vinc/totalEstados*100).toFixed(1)}<small>%</small></div><div class="foot">${vinc} clientes em programa ativo</div></div>
+  </div>
+
+  <div class="split">
+    <section class="card">
+      <div class="card-h"><h2>Consistência por executor</h2><span class="spacer"></span><span class="eyebrow">competência 09/2026 · dados fictícios</span></div>
+      <div class="card-b scrollx">
+        <table class="vgrade">
+          <thead><tr><th>Profissional</th><th>Registros</th><th>Completos</th><th>Densidade +1</th><th>σ do nível</th><th>Atraso médio</th></tr></thead>
+          <tbody>
+            ${E.equipe.map(p=>`<tr>
+              <td>${esc(p.nome)}</td>
+              <td class="num">${p.reg}</td>
+              <td class="num">${p.comp}%</td>
+              <td class="num">${p.dens.toFixed(1).replace(".",",")}</td>
+              <td class="num"><span class="chip ${p.sig>0.5?"crit":p.sig>0.3?"warn":"ok"}">${p.sig.toFixed(2).replace(".",",")}</span></td>
+              <td class="num">${p.atraso} min</td>
+            </tr>`).join("")}
+          </tbody>
+        </table>
+        <div class="note warn" style="margin-top:12px"><b>Leia a coluna σ antes da coluna de densidade.</b> Dra. Helena entrega +1 com menos frequência, mas o problema maior é a variação: a experiência dela muda de cliente para cliente, e é a variação que engorda a cauda de abandono.</div>
+      </div>
+    </section>
+
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <section class="card">
+        <div class="card-h"><h2>Composição da base</h2><span class="spacer"></span><span class="eyebrow">com o estado 4</span></div>
+        <div class="card-b">
+          ${E.estados.map(x=>{
+            const pc = x.n/totalEstados*100;
+            return `<div class="pi-row" style="display:grid;grid-template-columns:118px 1fr 54px;align-items:center;gap:10px;padding:4px 0">
+              <div style="font-size:12.6px">${x.k} · ${esc(x.nome)}</div>
+              <div style="height:18px;background:var(--surface-3);border-radius:4px;overflow:hidden">
+                <div style="height:100%;width:${pc.toFixed(1)}%;background:${x.cor};border-radius:0 4px 4px 0"></div></div>
+              <div class="num" style="font-size:12.6px;text-align:right">${pc.toFixed(1)}%</div>
+            </div>`;
+          }).join("")}
+          <div class="note ok" style="margin-top:10px"><b>O estado 4 só existe porque o M10 registra a adesão.</b> Antes do guia do PPS/PMS, esses ${vinc} clientes estavam misturados com os alicerçados — e a clínica não sabia quanto da base era recorrência formalizada.</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-h"><h2>Sinais do mês</h2></div>
+        <div class="card-b" style="display:flex;flex-direction:column;gap:11px">
+          ${E.sinais.map(([t,v,d,c])=>`
+            <div style="display:flex;align-items:baseline;gap:10px">
+              <span class="chip ${c}">${v}</span>
+              <div style="font-size:12.6px"><b>${esc(t)}</b><div style="color:var(--muted)">${esc(d)}</div></div>
+            </div>`).join("")}
+          <p class="demo-tag">dados fictícios · os campos vêm dos seis guias</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <section class="card" style="margin-top:16px">
+    <div class="card-h"><h2>De onde vem cada número</h2></div>
+    <div class="card-b grid g3" style="font-size:12.6px;color:var(--ink-2)">
+      <div><div class="eyebrow" style="margin-bottom:6px">Check-outs completos</div>Mínimo dos atos A1 a B5 em cada visita. Um ato em −1 derruba a visita inteira.</div>
+      <div><div class="eyebrow" style="margin-bottom:6px">σ do nível</div>Dispersão entre visitas do mesmo executor. Padronizar é reduzir σ, não elevar a média.</div>
+      <div><div class="eyebrow" style="margin-bottom:6px">π(4)</div>Fração da base em programa ativo, registrada em M10 do guia do PPS/PMS.</div>
+    </div>
+  </section>`;
+}
+
+Object.assign(ACTS, {
+  "pad-guia"(a){ S.pad.guia = a; render(); },
+  "pad-nivel"(a){
+    const [g,c,v] = a.split("|");
+    const k = g+"-"+c;
+    if(S.pad.reg[k] === +v) delete S.pad.reg[k]; else S.pad.reg[k] = +v;
+    render();
+    const guia = PAD.find(x=>x.id===g), N = padNivel(guia);
+    if(N.resp === N.tot){
+      toast(guia.nome+" registrado · nível "+(N.min===-1?"abaixo do padrão":N.min===0?"no padrão":"acima do padrão")+" · "+N.mais+" ato(s) em +1");
+    }
+  },
+  "pad-limpar"(){ S.pad.reg = {}; render(); toast("Registro limpo"); }
+});
+
 /* ============ roteador ============ */
 function render(){
   renderNav();
@@ -3168,7 +3530,8 @@ function render(){
   $("#unidade-nome").textContent=UNIDADES[S.unidade];
   $("#recov-v").textContent=BRL(S.recuperado);
   const map={painel:telaPainel, agenda:telaAgenda, autorizacoes:telaAutz, faturamento:telaFat, pacientes:telaPac, voo:telaVoo, retorno:telaRetorno, passageiros:telaPassageiros, poltronas:telaPoltronas, relatorios:telaRelatorios, pitch:telaPitch,
-    fluxo:telaFluxo, contatos:telaContatos, mapadia:telaMapaDia, classificacao:telaClassificacao, academia:telaAcademia};
+    fluxo:telaFluxo, contatos:telaContatos, mapadia:telaMapaDia, classificacao:telaClassificacao, academia:telaAcademia,
+    padroes:telaPadroes, experiencia:telaExperiencia};
   try{
     $("#screen").innerHTML=map[S.screen]();
     if(S.screen==="pitch") bindROI();
